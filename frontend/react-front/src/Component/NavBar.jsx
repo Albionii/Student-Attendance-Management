@@ -1,7 +1,9 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Sidebar, Flowbite } from "flowbite-react";
 
 import { HiArrowSmRight, HiChartPie, HiInbox, HiShoppingBag, HiTable, HiUser, HiViewBoards } from "react-icons/hi";
+
+import axios from 'axios';
 
 const customTheme =
 {
@@ -86,6 +88,33 @@ const customTheme =
 
 
 function NavBar() {
+  const [professorName, setProfessorName] = useState({
+      firstName:"",
+      lastName:""
+    }
+  );
+
+  const [ligjeratat, setLigjeratat] = useState({
+
+  })
+  
+useEffect(() => {
+  const getName = () => {
+    axios
+      .get(`http://localhost:8080/professors/find/1`)
+      .then((response) => {
+        setProfessorName(response.data);
+      })
+      .catch((error) => {
+        console.error("Error getting Statistics: " + error);
+      });
+  };
+
+  getName();
+}, []); // Empty dependencies array ensures it runs only once
+
+
+
     // 
     return (
         <div>
@@ -94,7 +123,7 @@ function NavBar() {
                     <Sidebar.Items>
                         <Sidebar.ItemGroup>
                             <Sidebar.Item href="#" className="pointer-events-none">
-                                Pershendetje Filan Fisteku
+                                Pershendetje {professorName.firstName + " " + professorName.lastName}
                             </Sidebar.Item>
                             <Sidebar.Item href="#" icon={HiViewBoards} label="Pro" labelColor="dark">
                                 Kanban

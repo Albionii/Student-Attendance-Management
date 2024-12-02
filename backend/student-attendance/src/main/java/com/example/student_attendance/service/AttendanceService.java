@@ -55,6 +55,6 @@ public class AttendanceService {
     }
 
     public List<Attendance> getAllAttendencesByLigjerataID(Long ligjerataID){
-//        attendanceRepo.findA
+        return attendanceRepo.findAllByLigjerata_Id(ligjerataID);
     }
 }

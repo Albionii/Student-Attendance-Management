@@ -1,10 +1,10 @@
 package com.example.student_attendance.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.Set;
 
 @Entity
 @Data
@@ -18,6 +18,9 @@ public class Student {
 
     private String lastName;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "student")
+    private Set<Attendance> attendances;
 
 
 }

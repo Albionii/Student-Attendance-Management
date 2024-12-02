@@ -3,24 +3,18 @@ package com.example.student_attendance.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
-
 import java.util.Set;
 
 @Entity
 @Data
-public class Professor {
-
+public class Lenda {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int professorID;
+    private int lendaID;
 
-    private String firstName;
-
-    private String lastName;
+    private String emriLendes;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "professor")
+    @OneToMany(mappedBy = "lenda")
     private Set<Ligjerata> ligjeratat;
-
-
 }

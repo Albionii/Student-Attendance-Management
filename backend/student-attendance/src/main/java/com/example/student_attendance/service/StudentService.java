@@ -1,4 +1,4 @@
-package com.example.student_attendance.servive;
+package com.example.student_attendance.service;
 
 import com.example.student_attendance.entities.Student;
 import com.example.student_attendance.repository.StudentRepo;

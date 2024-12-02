@@ -1,7 +1,7 @@
 package com.example.student_attendance.controller;
 
 import com.example.student_attendance.entities.Student;
-import com.example.student_attendance.servive.StudentService;
+import com.example.student_attendance.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

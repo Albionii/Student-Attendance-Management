@@ -60,7 +60,7 @@ public class AttendanceController {
         }
     }
 
-    @GetMapping("/findAttendance/{id}")
+    @GetMapping("/findAttendances/{id}")
     public ResponseEntity<List<Attendance>> getAttendanceFromLigjerataID(@PathVariable Long id) {
         return ResponseEntity.ok(attendanceService.getAllAttendencesByLigjerataID(id));
     }

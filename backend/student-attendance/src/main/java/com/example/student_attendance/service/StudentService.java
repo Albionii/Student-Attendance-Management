@@ -53,5 +53,9 @@ public class StudentService {
         throw new RuntimeException("Studenti me kete ID nuk ekziston");
     }
 
+    public List<Student> getAllStudentsByLigjerataID(Long ligjerataID) {
+        return studentRepository.findAllByLigjerata_Id(ligjerataID);
+    }
+
 
 }

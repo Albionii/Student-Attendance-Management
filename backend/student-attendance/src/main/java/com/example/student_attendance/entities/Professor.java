@@ -18,6 +18,8 @@ public class Professor {
 
     private String lastName;
 
+    private String password;
+
     @JsonIgnore
     @OneToMany(mappedBy = "professor")
     private Set<Ligjerata> ligjeratat;

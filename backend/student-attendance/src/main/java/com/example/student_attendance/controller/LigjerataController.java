@@ -44,6 +44,11 @@ public class LigjerataController {
         }
     }
 
+    @GetMapping("/getByProfessor/{id}")
+    public ResponseEntity<List<Ligjerata>> getLigjeratatByProfessorID(@PathVariable Long id){
+        return ResponseEntity.ok(ligjerataService.getAllLigjeratatByProfessorID(id));
+    }
+
     @GetMapping("/findAll")
     public ResponseEntity<List<Ligjerata>> getAllLigjeratat() {
         return ResponseEntity.ok(ligjerataService.getAllLigjerata());

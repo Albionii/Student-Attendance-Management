@@ -1,117 +1,82 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dropdown, Button, Table } from "flowbite-react";
 
+import axios from 'axios';
+
 function Studentet() {
-    const LigjerataData = [
-        { name: "Ligjerata" },
-        { name: "Ligjerata2" }
-    ];
-    const Studentdat = [
-        { id: "Anna Jones" },
-        { id: "Isabella Perez" },
-        { id: "Anna Wilson" },
-        { id: "Alex Moore" },
-        { id: "Daniel Jones" },
-        { id: "Andrew Perez" },
-        { id: "Daniel Thomas" },
-        { id: "Daniel Garcia" },
-        { id: "Sophia Jones" },
-        { id: "Joshua Anderson" },
-        { id: "Sarah Harris" },
-        { id: "Sarah Perez" },
-        { id: "Chris Moore" },
-        { id: "Chris Martinez" },
-        { id: "Joshua Jackson" },
-        { id: "Joshua Martin" },
-        { id: "Anna Davis" },
-        { id: "John Thomas" },
-        { id: "Katie Johnson" },
-        { id: "Robert Hernandez" },
-        { id: "Katie Lee" },
-        { id: "Matthew Williams" },
-        { id: "Matthew Williams" },
-        { id: "David Smith" },
-        { id: "Michael Davis" },
-        { id: "Alex Thompson" },
-        { id: "Jane Jackson" },
-        { id: "Anna Brown" },
-        { id: "Mia Martin" },
-        { id: "Alex Taylor" },
-        { id: "John White" },
-        { id: "Robert Gonzalez" },
-        { id: "Emma Brown" },
-        { id: "Daniel Gonzalez" },
-        { id: "Emily Jackson" },
-        { id: "Ethan Martinez" },
-        { id: "Sarah Taylor" },
-        { id: "John Smith" },
-        { id: "Alex Taylor" },
-        { id: "Matthew Miller" },
-        { id: "Daniel Miller" },
-        { id: "Mia Taylor" },
-        { id: "Sarah Miller" },
-        { id: "Andrew Lopez" },
-        { id: "Olivia Harris" },
-        { id: "Jane Davis" },
-        { id: "John Thomas" },
-        { id: "Katie Jackson" },
-        { id: "James Thompson" },
-        { id: "Matthew Johnson" },
-        { id: "Daniel Harris" },
-        { id: "Sarah Johnson" },
-        { id: "Anna Davis" },
-        { id: "Laura Jones" },
-        { id: "Katie Smith" },
-        { id: "Chris Garcia" },
-        { id: "Chris Harris" },
-        { id: "Michael Davis" },
-        { id: "Katie Davis" },
-        { id: "Sophia Brown" },
-        { id: "David Anderson" },
-        { id: "Chris Brown" },
-        { id: "Anna Martin" },
-        { id: "Sophia Martinez" },
-        { id: "Sophia Brown" },
-        { id: "Joshua Hernandez" },
-        { id: "Katie Martin" },
-        { id: "Jane Williams" },
-        { id: "Ethan Anderson" },
-        { id: "Joshua Lopez" },
-        { id: "Daniel Martinez" },
-        { id: "Joshua Hernandez" },
-        { id: "Charlotte Taylor" },
-        { id: "John White" },
-        { id: "Alex Miller" },
-        { id: "Andrew Moore" },
-        { id: "John Harris" },
-        { id: "Chris Wilson" },
-        { id: "Ethan Sanchez" },
-        { id: "Robert Thompson" },
-        { id: "Daniel Johnson" },
-        { id: "Jane Taylor" },
-        { id: "Laura Johnson" },
-        { id: "Laura Lopez" },
-        { id: "Sophia Garcia" },
-        { id: "Emily Jones" },
-        { id: "David Johnson" },
-        { id: "James Wilson" },
-        { id: "Olivia Williams" },
-        { id: "Emma Johnson" },
-        { id: "Andrew Jones" },
-        { id: "Michael Miller" },
-        { id: "Jane Perez" },
-        { id: "Daniel White" },
-        { id: "Jane Brown" },
-        { id: "Michael Williams" },
-        { id: "Emma Johnson" },
-        { id: "Andrew Smith" },
-        { id: "Sarah Anderson" },
-        { id: "Katie Davis" }
-    ];
+
+  const [attendaces, setAttendances] = useState(null);
+  const [ligjeratat, setLigjeratat] = useState(null);
+  const [studentet, setStudentet] = useState(null);
+
+  useEffect(() => {
+    const getAttendances = () => {
+      axios
+        .get(`http://localhost:8080/attendance/findAttendances/2`)
+        .then((response) => {
+          setAttendances(response.data);
+        })
+        .catch((error) => {
+          console.error("Error getting Attendances: " + error);
+        });
+    };
+
+    const getStudents = () => {
+      axios
+        .get(`http://localhost:8080/student/findAll`)
+        .then((response) => {
+          setStudentet(response.data);
+        })
+        .catch((error) => {
+          console.error("Error getting students: " + error);
+        });
+    };
+  
+    getAttendances();
+  }, []);
+  
+  const getLigjeratatByProfessorID = () => {
+    axios
+      .get(`http://localhost:8080/ligjerata/getByProfessor/`+1)
+      .then((response) => {
+        setLigjeratat(response.data);
+      })
+      .catch((error) => {
+        console.error("Error getting ligjeratat: " + error);
+      });
+  };
+
+  const getStudentsByLigjerataID = (id) => {
+    console.log("id : " + 2);
+    axios
+      .get(`http://localhost:8080/student/getByLigjerata/`+2)
+      .then((response) => {
+        setStudentet(response.data);
+      })
+      .catch((error) => {
+        console.error("Error getting students: " + error);
+      });
+  };
+
+
+    const getTimeStayedInLecture = (entry, out) => {
+      const arrivalTime = new Date(entry); 
+      const departureTime = new Date(out);
+  
+      const timeSpentMilliseconds = departureTime - arrivalTime;
+  
+      const timeSpentMinutes = timeSpentMilliseconds / (1000 * 60); // Convert to minutes
+      
+      const hours = Math.floor(timeSpentMinutes / 60);
+      const minutes = Math.floor(timeSpentMinutes % 60);
+  
+      return String(hours).padStart(2,'0') + " : " + String(minutes).padStart(2, '0');
+    }
+  
 
     const [searchItem, setSearchItem] = useState('')
 
-    const [filteredUsers, setFilteredUsers] = useState(Studentdat)
+    const [filteredUsers, setFilteredUsers] = useState('');
 
     const handleInputChange = (e) => {
         const searchTerm = e.target.value;
@@ -123,15 +88,21 @@ function Studentet() {
         setFilteredUsers(filteredItems);
     }
 
-    const [searchStudents, setSearchStudents] = useState(false);
-    const [searchLigjerata, setSearchLigjerata] = useState(false);
-
-    const handleStudents = () => {
-        setSearchStudents(!searchStudents);
+    const handleStudents = (id) => {
+      getStudentsByLigjerataID(id);
+      setCloseStudentDisplay(d=>!d);
     }
     const handleLigjerata = () => {
-        setSearchLigjerata(!searchLigjerata);
+      getLigjeratatByProfessorID();
+      setCloseLigjerataDisplay(d=>!d);
     }
+
+    const [closeStudentDisplay, setCloseStudentDisplay] = useState(true);
+    const [closeLigjerataDisplay, setCloseLigjerataDisplay] = useState(true);
+
+    
+
+    
 
     const tableTheme = 
         {
@@ -165,7 +136,7 @@ function Studentet() {
                 <div className='flex justify-center w-full h-fit mt-2 '>
                     <div className='flex gap-2'>
                         <div>
-                            <Button color='success' onClick={handleLigjerata}>Kerko Ligjeratat </Button>
+                            <Button color='success' onClick={handleLigjerata} >Kerko Ligjeratat </Button>
                         </div>
                         <div>
                             <Button color='success' onClick={handleStudents}>Kerko Studentet</Button>
@@ -174,10 +145,10 @@ function Studentet() {
 
 
                 </div>
-                <div style={{ display: searchStudents ? '' : 'none' }} className="fixed  inset-0 z-50 h-screen w-screen bg-black bg-opacity-30 flex justify-center items-center">
+                <div className={"fixed inset-0 z-50 h-screen w-screen bg-black bg-opacity-30 flex justify-center items-center " + (closeStudentDisplay && "hidden")}>
 
                     <div className="bg-white p-6 rounded shadow-lg">
-                        <p onClick={handleStudents} className='text-right cursor-pointer'>X</p>
+                        <p onClick={() => setCloseStudentDisplay(d => !d)} className='text-right cursor-pointer'>X</p>
                         <input
                             type="text"
                             value={searchItem}
@@ -186,22 +157,25 @@ function Studentet() {
                             className="border p-2 rounded w-full mb-4"
                         />
                         <div className="max-h-60 overflow-auto">
-                            {filteredUsers.map((item, index) => (
+                          {studentet != null && studentet.map((student, index) => (
+                            <p key={index} className="p-2 border-b hover:bg-green-200 cursor-pointer">{student.firstName}</p>
+                          ))}
+                            {/* {filteredUsers.map((item, index) => (
                                 <p key={index} onClick={handleStudents} className="p-2 border-b hover:bg-green-200 cursor-pointer">
                                     {item.id}
                                 </p>
-                            ))}
+                            ))} */}
                         </div>
                     </div>
                 </div>
-                <div style={{ display: searchLigjerata ? '' : 'none' }} className="fixed  inset-0 z-50 h-screen w-screen bg-black bg-opacity-30 flex justify-center items-center">
+                <div className={"fixed  inset-0 z-50 h-screen w-screen bg-black bg-opacity-30 flex justify-center items-center " + (closeLigjerataDisplay && "hidden")}>
 
-                    <div className="bg-white p-6 rounded shadow-lg">
-                        <p onClick={handleLigjerata} className='text-right cursor-pointer'>X</p>
+                    <div className={"bg-white p-6 rounded shadow-lg "}>
+                        <p onClick={() => setCloseLigjerataDisplay(d => !d)} className='text-right cursor-pointer'>X</p>
                         <div className="max-h-60 overflow-auto">
-                            {LigjerataData.map((item, index) => (
-                                <p key={index} onClick={handleStudents} className="p-3 border-b hover:bg-green-200 cursor-pointer">
-                                    {item.name}
+                            {ligjeratat != null && ligjeratat.map((ligjerata, index) => (
+                                <p key={index} onClick={()=>handleStudents(ligjerata.id)} className="p-3 border-b hover:bg-green-200 cursor-pointer">
+                                    {ligjerata.lenda.emriLendes}
                                 </p>
                             ))}
                         </div>
@@ -214,35 +188,20 @@ function Studentet() {
                             <Table.Head>
                                 <Table.HeadCell>Studenti</Table.HeadCell>
                                 <Table.HeadCell>Ligjerata</Table.HeadCell>
-                                <Table.HeadCell>Data</Table.HeadCell>
+                                <Table.HeadCell>Data e Hyrjes</Table.HeadCell>
+                                <Table.HeadCell>Data e Daljes</Table.HeadCell>
                                 <Table.HeadCell>Qendrueshmeria</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                        {'Albion Qerreti'}
-                                    </Table.Cell>
-                                    <Table.Cell>I bardhe</Table.Cell>
-                                    <Table.Cell>Pejan</Table.Cell>
-                                    <Table.Cell>$100,000,000</Table.Cell>
-
-                                </Table.Row>
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-                                        Blend Elezi
-                                    </Table.Cell>
-                                    <Table.Cell>I bardhe</Table.Cell>
-                                    <Table.Cell>Gjerman</Table.Cell>
-                                    <Table.Cell>$100,000,000</Table.Cell>
-
-                                </Table.Row>
-                                <Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">Abdusamed Beqiri</Table.Cell>
-                                    <Table.Cell>I Madh</Table.Cell>
-                                    <Table.Cell>Shqiptar</Table.Cell>
-                                    <Table.Cell>$&infin;</Table.Cell>
-
-                                </Table.Row>
+                                {attendaces != null && attendaces.map((attendace, index) => 
+                                  <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{attendace.student.firstName}</Table.Cell>
+                                    <Table.Cell>{attendace.ligjerata.lenda.emriLendes}</Table.Cell>
+                                    <Table.Cell>{attendace.hyrjaNeSalle}</Table.Cell>
+                                    <Table.Cell>{attendace.daljaNgaSalla}</Table.Cell>
+                                    <Table.Cell>{getTimeStayedInLecture(attendace.hyrjaNeSalle, attendace.daljaNgaSalla)}</Table.Cell>
+                                  </Table.Row>  
+                                )}
                             </Table.Body>
                         </Table>
                     </div>

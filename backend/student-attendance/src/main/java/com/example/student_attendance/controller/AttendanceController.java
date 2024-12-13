@@ -2,12 +2,18 @@ package com.example.student_attendance.controller;
 
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Ligjerata;
+import com.example.student_attendance.entities.Student;
+import com.example.student_attendance.repository.LigjerataRepo;
+import com.example.student_attendance.repository.StudentRepo;
 import com.example.student_attendance.service.AttendanceService;
+import com.example.student_attendance.service.LigjerataService;
+import com.example.student_attendance.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,7 +23,9 @@ import java.util.Optional;
 public class AttendanceController {
 
     private final AttendanceService attendanceService;
-
+    private final StudentService studentService;
+    private final LigjerataService ligjerataService;
+//    private final LigjerataRepo ligjerataRepo;
     @PostMapping("/create")
     public ResponseEntity<Attendance> createAttendance(@RequestBody Attendance attendance) {
         Attendance createdAttendance = attendanceService.createAttendance(attendance);
@@ -63,5 +71,14 @@ public class AttendanceController {
     @GetMapping("/findAttendances/{id}")
     public ResponseEntity<List<Attendance>> getAttendanceFromLigjerataID(@PathVariable Long id) {
         return ResponseEntity.ok(attendanceService.getAllAttendencesByLigjerataID(id));
+    }
+
+
+    @GetMapping("/check-in")
+    public ResponseEntity<String> checkInStudent() {
+        String uid = attendanceService.getStudentUID();
+//        attendanceService.closeThread(attendanceService.dataThread);
+        System.out.println("uid : " + uid);
+        return ResponseEntity.ok("Suii");
     }
 }

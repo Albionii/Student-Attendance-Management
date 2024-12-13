@@ -57,4 +57,9 @@ public class StudentController {
         }
     }
 
+    @GetMapping("/getByLigjerata/{id}")
+    public ResponseEntity<List<Student>> getStudentsByLigjerataID(@PathVariable Long id) {
+        return ResponseEntity.ok(studentService.getAllStudentsByLigjerataID(id));
+    }
+
 }

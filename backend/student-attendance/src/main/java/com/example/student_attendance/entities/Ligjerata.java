@@ -9,6 +9,7 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -35,5 +36,8 @@ public class Ligjerata {
     @JsonIgnore
     @OneToMany(mappedBy = "ligjerata")
     private Set<Attendance> attendances;
+
+    @ManyToMany(mappedBy = "ligjerata")
+    private List<Student> students;
 
 }

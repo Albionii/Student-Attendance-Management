@@ -2,18 +2,24 @@ package com.example.student_attendance.service;
 
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Student;
+import com.example.student_attendance.port.ArduinoConnection;
 import com.example.student_attendance.repository.AttendanceRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Scanner;
 
 @Service
 @RequiredArgsConstructor
 public class AttendanceService {
 
     private final AttendanceRepo attendanceRepo;
+
+    private ArduinoConnection arduinoConnection = new ArduinoConnection("COM5", 9600);
+    public Thread dataThread;
+    private String uid = "";
 
     public Attendance createAttendance(Attendance attendance) {
         return attendanceRepo.save(attendance);
@@ -56,5 +62,40 @@ public class AttendanceService {
 
     public List<Attendance> getAllAttendencesByLigjerataID(Long ligjerataID){
         return attendanceRepo.findAllByLigjerata_Id(ligjerataID);
+    }
+
+    public String getStudentUID(){
+        if (!arduinoConnection.openConnection()) {
+            System.out.println("Failed to open the portal.");
+            return null;
+        }
+
+        System.out.println("Serial portal has been opened!");
+
+        arduinoConnection.threadRunning = true;
+
+        dataThread = new Thread(() -> {
+            try(Scanner scanner = new Scanner(arduinoConnection.serialPort.getInputStream())){
+                while (arduinoConnection.threadRunning){
+                    if(scanner.hasNextLine()) {
+                        setUID(scanner.nextLine());
+                        return;
+                    }
+                }
+                Thread.sleep(200);
+            }catch (Exception e) {
+                System.out.println("Error ne thread : " + e.getMessage());
+            }
+        });
+        dataThread.start();
+        return uid;
+    }
+
+    public void closeThread(Thread thread) {
+        arduinoConnection.stopReading(thread);
+    }
+
+    public void setUID(String uid) {
+        this.uid = uid;
     }
 }

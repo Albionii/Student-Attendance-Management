@@ -111,8 +111,7 @@ useEffect(() => {
   };
 
   getName();
-}, []); // Empty dependencies array ensures it runs only once
-
+}, []); 
 
 
     // 

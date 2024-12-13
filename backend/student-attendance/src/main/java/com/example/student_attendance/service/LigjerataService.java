@@ -52,4 +52,8 @@ public class LigjerataService {
             throw new RuntimeException("Ligjerata me kete ID nuk ekziston");
         }
     }
+
+    public List<Ligjerata> getAllLigjeratatByProfessorID(Long id) {
+        return ligjerataRepo.findAllByProfessor_ProfessorID(id);
+    }
 }

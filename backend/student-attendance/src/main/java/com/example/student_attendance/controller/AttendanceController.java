@@ -3,29 +3,38 @@ package com.example.student_attendance.controller;
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Ligjerata;
 import com.example.student_attendance.entities.Student;
+import com.example.student_attendance.port.ArduinoConnection;
+import com.example.student_attendance.port.NfcTagListener;
 import com.example.student_attendance.repository.LigjerataRepo;
 import com.example.student_attendance.repository.StudentRepo;
 import com.example.student_attendance.service.AttendanceService;
 import com.example.student_attendance.service.LigjerataService;
 import com.example.student_attendance.service.StudentService;
+import com.example.student_attendance.websocket.NotificationWebSocketHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.WebSocketSession;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/attendance")
-public class AttendanceController {
+public class AttendanceController  {
 
     private final AttendanceService attendanceService;
     private final StudentService studentService;
     private final LigjerataService ligjerataService;
-//    private final LigjerataRepo ligjerataRepo;
+
+    @Autowired
+    private NotificationWebSocketHandler notificationWebSocketHandler;
+
+
+    //    private final LigjerataRepo ligjerataRepo;
     @PostMapping("/create")
     public ResponseEntity<Attendance> createAttendance(@RequestBody Attendance attendance) {
         Attendance createdAttendance = attendanceService.createAttendance(attendance);
@@ -74,11 +83,19 @@ public class AttendanceController {
     }
 
 
-    @GetMapping("/check-in")
-    public ResponseEntity<String> checkInStudent() {
-        String uid = attendanceService.getStudentUID();
-//        attendanceService.closeThread(attendanceService.dataThread);
-        System.out.println("uid : " + uid);
-        return ResponseEntity.ok("Suii");
+    @PostMapping("/check-in/{id}")
+    public ResponseEntity<String> checkInStudent(@PathVariable String id) {
+        Student student = studentService.getStudentByUID(id);
+        Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
+        Attendance newAttendance = new Attendance();
+        newAttendance.setStudent(student);
+        newAttendance.setLigjerata(ligjerata.get());
+
+        attendanceService.createAttendance(newAttendance);
+//        notificationWebSocketHandler.afterConnectionEstablished();
+        notificationWebSocketHandler.notifyFrontend();
+
+        return ResponseEntity.ok("Suii it is probably working");
     }
+
 }

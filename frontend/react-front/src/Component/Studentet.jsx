@@ -10,16 +10,6 @@ function Studentet() {
   const [studentet, setStudentet] = useState(null);
 
   useEffect(() => {
-    const getAttendances = () => {
-      axios
-        .get(`http://localhost:8080/attendance/findAttendances/2`)
-        .then((response) => {
-          setAttendances(response.data);
-        })
-        .catch((error) => {
-          console.error("Error getting Attendances: " + error);
-        });
-    };
 
     const getStudents = () => {
       axios
@@ -34,6 +24,49 @@ function Studentet() {
   
     getAttendances();
   }, []);
+
+
+  // WebSocket setup
+  useEffect(() => {
+    const socket = new WebSocket('ws://localhost:8080/notifications');
+
+    socket.onopen = () => {
+      console.log('Connected to WebSocket');
+    };
+
+    socket.onmessage = (event) => {
+      if (event.data === 'student-created') {
+        console.log('Student created! Refreshing student list...');
+        getAttendances();
+      // }
+    };
+
+    socket.onerror = (error) => {
+      console.log('WebSocket error:', error);
+    };
+
+    socket.onclose = () => {
+      console.log('WebSocket connection closed');
+    };
+
+    // Cleanup WebSocket connection on component unmount
+    return () => {
+      if (socket.readyState === 1) { // <-- This is important
+          socket.close();
+      }
+  }
+  }}, []);
+
+  const getAttendances = () => {
+    axios
+      .get(`http://localhost:8080/attendance/findAttendances/2`)
+      .then((response) => {
+        setAttendances(response.data);
+      })
+      .catch((error) => {
+        console.error("Error getting Attendances: " + error);
+      });
+  };
   
   const getLigjeratatByProfessorID = () => {
     axios

@@ -48,14 +48,14 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody Student newStudent){
-        try{
-            return ResponseEntity.ok(studentService.updateStudentByID(id,newStudent));
-        }catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody Student newStudent){
+//        try{
+//            return ResponseEntity.ok(studentService.updateStudentByID(id,newStudent));
+//        }catch (RuntimeException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        }
+//    }
 
     @GetMapping("/getByLigjerata/{id}")
     public ResponseEntity<List<Student>> getStudentsByLigjerataID(@PathVariable Long id) {

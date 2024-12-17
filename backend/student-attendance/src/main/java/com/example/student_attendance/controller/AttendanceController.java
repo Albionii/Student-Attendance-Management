@@ -3,15 +3,16 @@ package com.example.student_attendance.controller;
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Ligjerata;
 import com.example.student_attendance.entities.Student;
-import com.example.student_attendance.repository.LigjerataRepo;
-import com.example.student_attendance.repository.StudentRepo;
 import com.example.student_attendance.service.AttendanceService;
 import com.example.student_attendance.service.LigjerataService;
 import com.example.student_attendance.service.StudentService;
+import com.example.student_attendance.websocket.NotificationWebSocketHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.socket.WebSocketSession;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,12 +21,17 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/attendance")
-public class AttendanceController {
+public class AttendanceController  {
 
     private final AttendanceService attendanceService;
     private final StudentService studentService;
     private final LigjerataService ligjerataService;
-//    private final LigjerataRepo ligjerataRepo;
+
+    @Autowired
+    private NotificationWebSocketHandler notificationWebSocketHandler;
+
+
+    //    private final LigjerataRepo ligjerataRepo;
     @PostMapping("/create")
     public ResponseEntity<Attendance> createAttendance(@RequestBody Attendance attendance) {
         Attendance createdAttendance = attendanceService.createAttendance(attendance);
@@ -74,11 +80,38 @@ public class AttendanceController {
     }
 
 
-    @GetMapping("/check-in")
-    public ResponseEntity<String> checkInStudent() {
-        String uid = attendanceService.getStudentUID();
-//        attendanceService.closeThread(attendanceService.dataThread);
-        System.out.println("uid : " + uid);
-        return ResponseEntity.ok("Suii");
+    @PostMapping("/check-in/{id}")
+    public void checkInStudent(@PathVariable String id) {
+        try {
+            Student student = studentService.getStudentByUID(id);
+            Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
+
+            // If student entered a class.
+            if (student.getCurrentAttendanceID() == 0){
+                Attendance newAttendance = new Attendance();
+                newAttendance.setStudent(student);
+                newAttendance.setLigjerata(ligjerata.get());
+                newAttendance.setHyrjaNeSalle(LocalDateTime.now());
+                attendanceService.createAttendance(newAttendance);
+                student.setCurrentAttendanceID(newAttendance.getId());
+                studentService.updateStudentByID((long) student.getStudentID(), student);
+            }
+            // When student leaves the class.
+            else {
+                Attendance attendance = attendanceService.getAttendanceByID((long) student.getCurrentAttendanceID()).orElseThrow(() -> new RuntimeException("Attendance does not exist"));
+                attendance.setDaljaNgaSalla(LocalDateTime.now());
+                attendanceService.updateAttendanceByID((long) attendance.getId(), attendance);
+                student.setCurrentAttendanceID(0);
+                studentService.updateStudentByID((long) student.getStudentID(), student);
+            }
+
+            // Update the frontend.
+            notificationWebSocketHandler.notifyFrontend();
+        }catch (RuntimeException exception){
+
+            //? If Student does not exist in database inform arduino.
+            notificationWebSocketHandler.sendCommandToArduino(true);
+        }
     }
+
 }

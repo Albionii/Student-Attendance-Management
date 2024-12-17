@@ -64,7 +64,10 @@ public class StudentService {
     }
 
     public Student getStudentByUID(String uid) {
-        return studentRepository.findByUid(uid).orElseThrow(() -> new RuntimeException("Studenti nuk ekziston"));
+        return studentRepository.findByUid(uid).orElseThrow(() ->
+                (
+                        new RuntimeException("Studenti nuk ekziston")
+                ));
     }
 
 

@@ -9,16 +9,18 @@ public class NfcScannerApplication implements CommandLineRunner {
     private String portName;
     private int baudRate;
 
+    public static SerialPort serialPort;
+
     public NfcScannerApplication(String portName, int baudRate) {
         this.portName = portName;
         this.baudRate = baudRate;
-
     }
+
 
     @Override
     public void run(String... args) {
         // Open the serial port
-        SerialPort serialPort = SerialPort.getCommPort(portName);
+        serialPort = SerialPort.getCommPort(portName);
         serialPort.setBaudRate(baudRate);
 
         if (!serialPort.openPort()) {

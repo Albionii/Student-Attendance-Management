@@ -84,18 +84,21 @@ public class AttendanceController  {
 
 
     @PostMapping("/check-in/{id}")
-    public ResponseEntity<String> checkInStudent(@PathVariable String id) {
-        Student student = studentService.getStudentByUID(id);
-        Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
-        Attendance newAttendance = new Attendance();
-        newAttendance.setStudent(student);
-        newAttendance.setLigjerata(ligjerata.get());
+    public void checkInStudent(@PathVariable String id) {
+        try {
+            Student student = studentService.getStudentByUID(id);
+            Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
+            Attendance newAttendance = new Attendance();
+            newAttendance.setStudent(student);
+            newAttendance.setLigjerata(ligjerata.get());
 
-        attendanceService.createAttendance(newAttendance);
-//        notificationWebSocketHandler.afterConnectionEstablished();
-        notificationWebSocketHandler.notifyFrontend();
+            attendanceService.createAttendance(newAttendance);
+            notificationWebSocketHandler.notifyFrontend();
+        }catch (RuntimeException exception){
 
-        return ResponseEntity.ok("Suii it is probably working");
+            //? If Student does not exist in database inform arduino.
+            notificationWebSocketHandler.sendCommandToArduino(true);
+        }
     }
 
 }

@@ -51,7 +51,7 @@ function Studentet() {
 
     // Cleanup WebSocket connection on component unmount
     return () => {
-      if (socket.readyState === 1) { // <-- This is important
+      if (socket.readyState === 1) { //! <-- This is important
           socket.close();
       }
   }

@@ -97,6 +97,9 @@ function Studentet() {
       const departureTime = new Date(out);
   
       const timeSpentMilliseconds = departureTime - arrivalTime;
+      if (timeSpentMilliseconds < 0) {
+        return "";
+      }
   
       const timeSpentMinutes = timeSpentMilliseconds / (1000 * 60); // Convert to minutes
       
@@ -228,7 +231,7 @@ function Studentet() {
                             <Table.Body className="divide-y">
                                 {attendaces != null && attendaces.map((attendace, index) => 
                                   <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{attendace.student.firstName}</Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{attendace.student.firstName + " " + attendace.student.lastName}</Table.Cell>
                                     <Table.Cell>{attendace.ligjerata.lenda.emriLendes}</Table.Cell>
                                     <Table.Cell>{attendace.hyrjaNeSalle}</Table.Cell>
                                     <Table.Cell>{attendace.daljaNgaSalla}</Table.Cell>

@@ -193,7 +193,7 @@ function Studentet() {
                                 <Table.HeadCell>Qendrueshmeria</Table.HeadCell>
                             </Table.Head>
                             <Table.Body className="divide-y">
-                                {attendaces != null && attendaces.map((attendace, index) => 
+                              {attendaces != null && attendaces.map((attendace, index) => 
                                   <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
                                     <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{attendace.student.firstName}</Table.Cell>
                                     <Table.Cell>{attendace.ligjerata.lenda.emriLendes}</Table.Cell>

@@ -1,5 +1,3 @@
-  NFC-Based Student Attendance System body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0 20px; background-color: #f9f9f9; color: #333; } h1, h2, h3 { color: #222; } ul { margin: 10px 0; padding-left: 20px; } code { background-color: #e8e8e8; padding: 2px 4px; border-radius: 4px; font-family: "Courier New", Courier, monospace; } pre { background-color: #e8e8e8; padding: 10px; border-radius: 5px; overflow-x: auto; } a { color: #0066cc; text-decoration: none; } a:hover { text-decoration: underline; }
-
 NFC-Based Student Attendance System
 ===================================
 

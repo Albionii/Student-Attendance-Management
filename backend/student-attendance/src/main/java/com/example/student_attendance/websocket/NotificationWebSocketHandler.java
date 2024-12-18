@@ -42,7 +42,7 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
     }
 
 
-    public void sendCommandToArduino(boolean pinHigh) {
+    public void sendCommandToArduino(boolean isGreen) {
         if (!NfcScannerApplication.serialPort.isOpen()) {
             if (!NfcScannerApplication.serialPort.openPort()) {
                 System.out.println("Failed to open serial port.");
@@ -50,9 +50,10 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
             }
         }
 
-        byte commandInByte = (byte) (pinHigh ? '1' : '0');
+        byte LED = (byte)(isGreen ? '1': '0');
+
         synchronized (NfcScannerApplication.serialPort) {
-            NfcScannerApplication.serialPort.writeBytes(new byte[]{commandInByte}, 1);
+            NfcScannerApplication.serialPort.writeBytes(new byte[]{LED}, 1);
         }
     }
 }

@@ -107,10 +107,11 @@ public class AttendanceController  {
 
             // Update the frontend.
             notificationWebSocketHandler.notifyFrontend();
+            notificationWebSocketHandler.sendCommandToArduino(true);
         }catch (RuntimeException exception){
 
             //? If Student does not exist in database inform arduino.
-            notificationWebSocketHandler.sendCommandToArduino(true);
+            notificationWebSocketHandler.sendCommandToArduino(false);
         }
     }
 

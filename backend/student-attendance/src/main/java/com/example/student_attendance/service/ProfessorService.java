@@ -37,22 +37,22 @@ public class ProfessorService {
         return professorRepo.findAll();
     }
 
-    public Professor updateProfessorByID(Long id, Professor newProfessor) {
-        Optional<Professor> oldProfessor = getProfessorByID(id);
-        if (oldProfessor.isPresent()){
-            Professor professor = oldProfessor.get();
-
-//           Kur emri ose mbiemri te jene zbrazet mos ta ndryshojne vleren ne databaze objektit.
-            if (professor.getFirstName() != null){
-                professor.setFirstName(professor.getFirstName());
-            }
-            if (newProfessor.getLastName() != null) {
-                professor.setLastName(newProfessor.getLastName());
-            }
-            return professorRepo.save(professor);
-        }
-        throw new RuntimeException("Profesori me kete ID nuk ekziston");
-    }
+//    public Professor updateProfessorByID(Long id, Professor newProfessor) {
+//        Optional<Professor> oldProfessor = getProfessorByID(id);
+//        if (oldProfessor.isPresent()){
+//            Professor professor = oldProfessor.get();
+//
+////           Kur emri ose mbiemri te jene zbrazet mos ta ndryshojne vleren ne databaze objektit.
+//            if (professor.getFirstName() != null){
+//                professor.setFirstName(professor.getFirstName());
+//            }
+//            if (newProfessor.getLastName() != null) {
+//                professor.setLastName(newProfessor.getLastName());
+//            }
+//            return professorRepo.save(professor);
+//        }
+//        throw new RuntimeException("Profesori me kete ID nuk ekziston");
+//    }
 
 
 }

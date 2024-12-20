@@ -2,9 +2,11 @@ package com.example.student_attendance.service;
 
 import com.example.student_attendance.entities.Ligjerata;
 import com.example.student_attendance.entities.Student;
+import com.example.student_attendance.entities.User;
 import com.example.student_attendance.repository.AttendanceRepo;
 import com.example.student_attendance.repository.LigjerataRepo;
 import com.example.student_attendance.repository.StudentRepo;
+import com.example.student_attendance.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class StudentService {
     private final StudentRepo studentRepository;
     private final LigjerataRepo ligjerataRepo;
+    private final UserRepo userRepo;
 
     public Student createStudent(Student student){
         return studentRepository.save(student);
@@ -40,22 +43,24 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public Student updateStudentByID(Long id, Student newStudent) {
-        Optional<Student> oldStudent = getStudentByID(id);
-        if (oldStudent.isPresent()){
-            Student student = oldStudent.get();
-
-//           Kur emri ose mbiemri te jene zbrazet mos ta ndryshojne vleren ne databaze objektit.
-            if (newStudent.getFirstName() != null){
-                student.setFirstName(newStudent.getFirstName());
-            }
-            if (newStudent.getLastName() != null) {
-                student.setLastName(newStudent.getLastName());
-            }
-            return studentRepository.save(student);
-        }
-        throw new RuntimeException("Studenti me kete ID nuk ekziston");
-    }
+//    public User updateStudentByID(Long id, Student newStudent) {
+//        Optional<User> oldUser = userRepo.findById(id);
+//        if (oldUser.isPresent()){
+//            User user = oldUser.get();
+//            String firstName = userRepo.findById((Long.valueOf(newStudent.getStudentID()))).get().getFirstName();
+//            String lastName = userRepo.findById((Long.valueOf(newStudent.getStudentID()))).get().getLastName();
+//
+////           Kur emri ose mbiemri te jene zbrazet mos ta ndryshojne vleren ne databaze objektit.
+//            if (user.getFirstName() != null){
+//                user.setFirstName(firstName);
+//            }
+//            if (user.getLastName() != null) {
+//                user.setLastName(lastName);
+//            }
+//            return userRepo.save(user);
+//        }
+//        throw new RuntimeException("Studenti me kete ID nuk ekziston");
+//    }
 
     public List<Student> getAllStudentsByLigjerataID(Long ligjerataID) {
         Optional<Ligjerata> ligjerata = ligjerataRepo.findById(ligjerataID);
@@ -63,8 +68,8 @@ public class StudentService {
         return ligjerata.isPresent() ? ligjerata.get().getStudents() : null;
     }
 
-    public Student getStudentByUID(String uid) {
-        return studentRepository.findByUid(uid).orElseThrow(() -> new RuntimeException("Studenti nuk ekziston"));
+    public Optional<Student> getStudentByUID(String uid) {
+        return studentRepository.findByUid(uid);
     }
 
 

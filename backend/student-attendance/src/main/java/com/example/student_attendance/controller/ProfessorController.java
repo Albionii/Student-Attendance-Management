@@ -2,6 +2,7 @@ package com.example.student_attendance.controller;
 
 import com.example.student_attendance.entities.Professor;
 import com.example.student_attendance.service.ProfessorService;
+import com.example.student_attendance.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,7 @@ import java.util.Optional;
 public class ProfessorController {
 
     private final ProfessorService professorService;
+    private final StudentService studentService;
 
 
     @PostMapping("/create")
@@ -49,12 +51,12 @@ public class ProfessorController {
         return ResponseEntity.ok(professorService.getAllProfessors());
     }
 
-    @PutMapping("/update/{id}")
-    public ResponseEntity<?> updateProfessor(@PathVariable Long id, @RequestBody Professor newProfessor) {
-        try {
-            return ResponseEntity.ok(professorService.updateProfessorByID(id, newProfessor));
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-        }
-    }
+//    @PutMapping("/update/{id}")
+//    public ResponseEntity<?> updateProfessor(@PathVariable Long id, @RequestBody Professor newProfessor) {
+//        try {
+//            return ResponseEntity.ok(studentService.updateStudentByID(id, newProfessor));
+//        } catch (RuntimeException e) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//        }
+//    }
 }

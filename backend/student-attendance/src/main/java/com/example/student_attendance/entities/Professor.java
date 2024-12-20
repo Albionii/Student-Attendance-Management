@@ -14,11 +14,9 @@ public class Professor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int professorID;
 
-    private String firstName;
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
 
-    private String lastName;
-
-    private String password;
 
     @JsonIgnore
     @OneToMany(mappedBy = "professor")

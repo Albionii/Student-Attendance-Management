@@ -15,12 +15,13 @@ public class Student {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int studentID;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
     @Column(unique = true)
     private String uid;
 
-    private String firstName;
 
-    private String lastName;
 
     private int currentAttendanceID;
 

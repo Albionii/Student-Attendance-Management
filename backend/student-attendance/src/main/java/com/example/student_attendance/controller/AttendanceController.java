@@ -3,10 +3,6 @@ package com.example.student_attendance.controller;
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Ligjerata;
 import com.example.student_attendance.entities.Student;
-import com.example.student_attendance.port.ArduinoConnection;
-import com.example.student_attendance.port.NfcTagListener;
-import com.example.student_attendance.repository.LigjerataRepo;
-import com.example.student_attendance.repository.StudentRepo;
 import com.example.student_attendance.service.AttendanceService;
 import com.example.student_attendance.service.LigjerataService;
 import com.example.student_attendance.service.StudentService;
@@ -18,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.socket.WebSocketSession;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -84,18 +81,38 @@ public class AttendanceController  {
 
 
     @PostMapping("/check-in/{id}")
-    public ResponseEntity<String> checkInStudent(@PathVariable String id) {
-        Student student = studentService.getStudentByUID(id).get();
-        Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
-        Attendance newAttendance = new Attendance();
-        newAttendance.setStudent(student);
-        newAttendance.setLigjerata(ligjerata.get());
+    public void checkInStudent(@PathVariable String id) {
+        try {
+            Student student = studentService.getStudentByUID(id);
+            Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
 
-        attendanceService.createAttendance(newAttendance);
-//        notificationWebSocketHandler.afterConnectionEstablished();
-        notificationWebSocketHandler.notifyFrontend();
+            // If student entered a class.
+            if (student.getCurrentAttendanceID() == 0){
+                Attendance newAttendance = new Attendance();
+                newAttendance.setStudent(student);
+                newAttendance.setLigjerata(ligjerata.get());
+                newAttendance.setHyrjaNeSalle(LocalDateTime.now());
+                attendanceService.createAttendance(newAttendance);
+                student.setCurrentAttendanceID(newAttendance.getId());
+                studentService.updateStudentByID((long) student.getStudentID(), student);
+            }
+            // When student leaves the class.
+            else {
+                Attendance attendance = attendanceService.getAttendanceByID((long) student.getCurrentAttendanceID()).orElseThrow(() -> new RuntimeException("Attendance does not exist"));
+                attendance.setDaljaNgaSalla(LocalDateTime.now());
+                attendanceService.updateAttendanceByID((long) attendance.getId(), attendance);
+                student.setCurrentAttendanceID(0);
+                studentService.updateStudentByID((long) student.getStudentID(), student);
+            }
 
-        return ResponseEntity.ok("Suii it is probably working");
+            // Update the frontend.
+            notificationWebSocketHandler.notifyFrontend();
+            notificationWebSocketHandler.sendCommandToArduino(true);
+        }catch (RuntimeException exception){
+
+            //? If Student does not exist in database inform arduino.
+            notificationWebSocketHandler.sendCommandToArduino(false);
+        }
     }
 
 }

@@ -3,14 +3,19 @@
 
 #define RST_PIN 7
 #define SS_PIN 10
+#define CONTROL_PIN_RED 3 // Pin to be controlled
+#define CONTROL_PIN_GREEN 4 // Pin to be controlled
 
 MFRC522 nfc(SS_PIN, RST_PIN);
 
 void setup() {
-    Serial.begin(9600);  // Start serial communication
-    SPI.begin();         // Initialize SPI
-    nfc.PCD_Init();      // Initialize NFC reader
-    // Serial.println("NFC Reader ready.");
+    Serial.begin(9600);  
+    SPI.begin();         
+    nfc.PCD_Init();      
+    pinMode(CONTROL_PIN_RED, OUTPUT); 
+    pinMode(CONTROL_PIN_GREEN, OUTPUT); 
+    digitalWrite(CONTROL_PIN_RED, LOW);
+    digitalWrite(CONTROL_PIN_GREEN, LOW);
 }
 
 void loop() {
@@ -22,8 +27,32 @@ void loop() {
         
         // Send UID over Serial
         Serial.println(uid);
-        
-        nfc.PICC_HaltA();
+        nfc.PICC_HaltA(); // Halt the card
     }
-    delay(200); 
+
+    // This is the code for reading from backend if a student is not in database.    
+    if (Serial.available() > 0) {
+        char command = Serial.read(); 
+
+        if (command == '0') {
+            digitalWrite(CONTROL_PIN_RED, HIGH); // Set pin HIGH
+
+            delay(2000); // Keep HIGH for 2 seconds
+
+            digitalWrite(CONTROL_PIN_RED, LOW); 
+        }
+        else if (command == '1') {
+            digitalWrite(CONTROL_PIN_GREEN, HIGH); // Set pin HIGH
+
+            delay(2000); // Keep HIGH for 2 seconds
+
+            digitalWrite(CONTROL_PIN_GREEN, LOW); 
+          
+        }
+         else {
+            Serial.println("Invalid command received: " + String(command));
+        }
+    }
+
+    delay(200);
 }

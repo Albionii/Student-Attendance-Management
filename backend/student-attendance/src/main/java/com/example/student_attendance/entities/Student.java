@@ -23,6 +23,8 @@ public class Student {
 
 
 
+    private int currentAttendanceID;
+
     @ManyToMany
     @JoinTable(
             name = "student_ligjerata",  // Name of the join table

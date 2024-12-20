@@ -136,6 +136,9 @@ useEffect(() => {
                             <Sidebar.Item href="#" icon={HiArrowSmRight}>
                                 Sign out
                             </Sidebar.Item>
+                            <Sidebar.Item href="/CreateUser" icon={HiArrowSmRight}>
+                                regjistro test
+                            </Sidebar.Item>
                         </Sidebar.ItemGroup>
                     </Sidebar.Items>
                 </Sidebar>

@@ -20,7 +20,7 @@ const LoginForm = () => {
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Login</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="email" className="block text-sm text-gray-600 mb-2">
+            <label htmlFor="email" className="block text-sm  text-gray-600 mb-2">
               ID
             </label>
             <input
@@ -28,7 +28,7 @@ const LoginForm = () => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-2  border border-gray-300 rounded-md"
+              className="w-full outline-none px-4 py-2  border border-gray-300 rounded-md"
               required
             />
           </div>
@@ -41,7 +41,7 @@ const LoginForm = () => {
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="w-full px-4 py-2  border border-gray-300 rounded-md"
+              className="w-full outline-none px-4 py-2  border border-gray-300 rounded-md"
               required
             />
           </div>

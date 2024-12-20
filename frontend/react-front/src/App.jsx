@@ -6,7 +6,7 @@ import Login from './Pages/Login';
 
 function App() {
   
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const [isLoggedIn,setIsLoggedIn] = useState(true);
 
   return (
     <>
@@ -14,5 +14,6 @@ function App() {
     </>
   )
 }
+
 
 export default App

@@ -6,6 +6,7 @@ import com.example.student_attendance.entities.Student;
 import com.example.student_attendance.service.AttendanceService;
 import com.example.student_attendance.service.LigjerataService;
 import com.example.student_attendance.service.StudentService;
+import com.example.student_attendance.service.UserService;
 import com.example.student_attendance.websocket.NotificationWebSocketHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ public class AttendanceController  {
     private final AttendanceService attendanceService;
     private final StudentService studentService;
     private final LigjerataService ligjerataService;
+    private final UserService userService;
 
     @Autowired
     private NotificationWebSocketHandler notificationWebSocketHandler;
@@ -83,7 +85,7 @@ public class AttendanceController  {
     @PostMapping("/check-in/{id}")
     public void checkInStudent(@PathVariable String id) {
         try {
-            Student student = studentService.getStudentByUID(id);
+            Student student = studentService.getStudentByUID(id).get();
             Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
 
             // If student entered a class.
@@ -94,7 +96,7 @@ public class AttendanceController  {
                 newAttendance.setHyrjaNeSalle(LocalDateTime.now());
                 attendanceService.createAttendance(newAttendance);
                 student.setCurrentAttendanceID(newAttendance.getId());
-                studentService.updateStudentByID((long) student.getStudentID(), student);
+                userService.updateUserById((long) student.getStudentID(), student.getUser().getFirstName(),student.getUser().getLastName());
             }
             // When student leaves the class.
             else {
@@ -102,7 +104,8 @@ public class AttendanceController  {
                 attendance.setDaljaNgaSalla(LocalDateTime.now());
                 attendanceService.updateAttendanceByID((long) attendance.getId(), attendance);
                 student.setCurrentAttendanceID(0);
-                studentService.updateStudentByID((long) student.getStudentID(), student);
+                userService.updateUserById((long) student.getStudentID(), student.getUser().getFirstName(),student.getUser().getLastName());
+
             }
 
             // Update the frontend.

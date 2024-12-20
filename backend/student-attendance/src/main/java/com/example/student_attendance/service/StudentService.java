@@ -68,8 +68,8 @@ public class StudentService {
         return ligjerata.isPresent() ? ligjerata.get().getStudents() : null;
     }
 
-    public Student getStudentByUID(String uid) {
-        return studentRepository.findByUid(uid).orElseThrow(() -> new RuntimeException("Studenti nuk ekziston"));
+    public Optional<Student> getStudentByUID(String uid) {
+        return studentRepository.findByUid(uid);
     }
 
 

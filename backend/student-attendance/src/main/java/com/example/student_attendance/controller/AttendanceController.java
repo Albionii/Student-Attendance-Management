@@ -85,7 +85,7 @@ public class AttendanceController  {
 
     @PostMapping("/check-in/{id}")
     public ResponseEntity<String> checkInStudent(@PathVariable String id) {
-        Student student = studentService.getStudentByUID(id);
+        Student student = studentService.getStudentByUID(id).get();
         Optional<Ligjerata> ligjerata = ligjerataService.getLigjerataByID(2L);
         Attendance newAttendance = new Attendance();
         newAttendance.setStudent(student);

@@ -108,7 +108,7 @@ public class AttendanceController  {
 
             }
 
-            // Update the frontend.
+            //? Update the frontend.
             notificationWebSocketHandler.notifyFrontend();
             notificationWebSocketHandler.sendCommandToArduino(true);
         }catch (RuntimeException exception){

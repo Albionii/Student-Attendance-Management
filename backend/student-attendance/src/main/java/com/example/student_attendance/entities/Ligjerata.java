@@ -37,6 +37,7 @@ public class Ligjerata {
     @OneToMany(mappedBy = "ligjerata")
     private Set<Attendance> attendances;
 
+    @JsonIgnore
     @ManyToMany(mappedBy = "ligjerata")
     private List<Student> students;
 

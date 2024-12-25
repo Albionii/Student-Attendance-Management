@@ -1,11 +1,9 @@
 package com.example.student_attendance.DTO;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
-public class signInDTO {
+@Data
+public class LoginDTO {
     private String email;
     private String password;
 }

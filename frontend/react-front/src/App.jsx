@@ -6,11 +6,20 @@ import Login from './Pages/Login';
 
 function App() {
   
-  const [isLoggedIn,setIsLoggedIn] = useState(true);
+  const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({});
+
+  const handleLoggedIn = () => {
+    setIsLoggedIn(true);
+  }
+
+  const handleToken = (user) => {
+    setUserData(user)
+  }
 
   return (
     <>
-      {isLoggedIn ? <Start/>:<Login/>}
+      {isLoggedIn ? <Start userData={userData}/>:<Login loggedIn={handleLoggedIn} getToken={handleToken}/>}
     </>
   )
 }

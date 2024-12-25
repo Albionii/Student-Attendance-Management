@@ -1,13 +1,17 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import NavBar from '../Component/NavBar'
 import Studentet from '../Component/Studentet'
 import CreateUser from './CreateUser'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { readTokenData } from '../ReadToken'
 
-function Start() {
+function Start({userData}) {
+  
+  
+
   return (
     <div className='flex '>
-        <NavBar/>
+        <NavBar userData={userData}/>
         <BrowserRouter>        
         <Routes> 
         <Route path='/' element={<Studentet />}></Route>

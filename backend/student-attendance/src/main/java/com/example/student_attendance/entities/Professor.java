@@ -14,6 +14,8 @@ public class Professor {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int professorID;
 
+
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 

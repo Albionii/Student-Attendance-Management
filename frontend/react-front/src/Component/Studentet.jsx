@@ -3,6 +3,8 @@ import { Dropdown, Button, Table } from "flowbite-react";
 
 import axios from 'axios';
 
+import {tableTheme} from "../Themes"
+
 function Studentet() {
 
   const [attendaces, setAttendances] = useState(null);
@@ -35,10 +37,7 @@ function Studentet() {
     };
 
     socket.onmessage = (event) => {
-      if (event.data === 'student-created') {
-        console.log('Student created! Refreshing student list...');
         getAttendances();
-      // }
     };
 
     socket.onerror = (error) => {
@@ -49,12 +48,11 @@ function Studentet() {
       console.log('WebSocket connection closed');
     };
 
-    // Cleanup WebSocket connection on component unmount
     return () => {
       if (socket.readyState === 1) { //! <-- This is important
           socket.close();
       }
-  }
+  
   }}, []);
 
   const getAttendances = () => {
@@ -111,9 +109,8 @@ function Studentet() {
   
 
     const [searchItem, setSearchItem] = useState('')
-
     const [filteredUsers, setFilteredUsers] = useState('');
-
+    
     const handleInputChange = (e) => {
         const searchTerm = e.target.value;
         setSearchItem(searchTerm)
@@ -135,36 +132,6 @@ function Studentet() {
 
     const [closeStudentDisplay, setCloseStudentDisplay] = useState(true);
     const [closeLigjerataDisplay, setCloseLigjerataDisplay] = useState(true);
-
-    
-
-    
-
-    const tableTheme = 
-        {
-            "root": {
-                "base": "w-full text-left text-sm text-gray-500 dark:text-gray-400",
-                "shadow": "absolute left-0 top-0 -z-10 h-full w-full rounded-lg bg-white drop-shadow-md dark:bg-black",
-                "wrapper": "relative"
-            },
-            "body": {
-                "base": "group/body",
-                "cell": {
-                    "base": "px-6 py-4 group-first/body:group-first/row:first:rounded-tl-lg group-first/body:group-first/row:last:rounded-tr-lg group-last/body:group-last/row:first:rounded-bl-lg group-last/body:group-last/row:last:rounded-br-lg"
-                }
-            },
-            "head": {
-                "base": "group/head text-xs uppercase text-gray-700 dark:text-gray-400",
-                "cell": {
-                    "base": "bg-green-100 px-6 py-3 group-first/head:first:rounded-tl-lg group-first/head:last:rounded-tr-lg dark:bg-gray-700"
-                }
-            },
-            "row": {
-                "base": "group/row",
-                "hovered": "hover:bg-green-100 dark:hover:bg-gray-600",
-                "striped": "odd:bg-white even:bg-gray-600 odd:dark:bg-gray-800 even:dark:bg-gray-700"
-            }
-        };
 
     return (
         <>
@@ -231,7 +198,7 @@ function Studentet() {
                             <Table.Body className="divide-y">
                               {attendaces != null && attendaces.map((attendace, index) => 
                                   <Table.Row key={index} className="bg-white dark:border-gray-700 dark:bg-gray-800">
-                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{attendace.student.firstName + " " + attendace.student.lastName}</Table.Cell>
+                                    <Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">{attendace.student.user.firstName + " " + attendace.student.user.lastName}</Table.Cell>
                                     <Table.Cell>{attendace.ligjerata.lenda.emriLendes}</Table.Cell>
                                     <Table.Cell>{attendace.hyrjaNeSalle}</Table.Cell>
                                     <Table.Cell>{attendace.daljaNgaSalla}</Table.Cell>

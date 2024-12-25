@@ -1,14 +1,36 @@
+import axios from 'axios';
 import React , { useState }  from 'react'
+import { readTokenData } from '../ReadToken';
 
-const LoginForm = () => {
+const LoginForm = ({loggedIn, getToken}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const logout = () => {
+    setEmail('');
+    setPassword('');
+  }
+
+  const findUser = () => {
+    const response = axios
+    .post("http://localhost:8080/user/login", {email, password},{withCredentials: true})
+    .then((response) => {
+      getToken(response.data.user);
+      loggedIn();
+    })
+    .catch((error) => {
+      if (error.response){
+        console.log("Error : " + error.response.data)
+      }else {
+        console.log("Error : " + error.message)
+      }
+    })
+
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log('Email:', email);
-    cogitnsole.log('Password:', password);
-    // Add login logic here (e.g., API call)
+    findUser();
   };
 
   return (

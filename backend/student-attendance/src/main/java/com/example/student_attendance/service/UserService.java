@@ -20,6 +20,10 @@ public class UserService {
         return userRepo.findById(id);
     }
 
+    public User findUserByEmail(String email){
+        return userRepo.findUserByEmail(email);
+    }
+
     public User updateUserById (Long id, String firstName, String lastName){
         Optional<User> oldUser = getUserById(id);
         if (oldUser.isPresent()){

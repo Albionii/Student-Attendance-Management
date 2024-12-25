@@ -1,9 +1,6 @@
 package com.example.student_attendance.controller;
 
-import com.example.student_attendance.DTO.CreateProfessorDTO;
-import com.example.student_attendance.DTO.CreateStudentDTO;
-import com.example.student_attendance.DTO.NameRequest;
-import com.example.student_attendance.DTO.signInDTO;
+import com.example.student_attendance.DTO.*;
 import com.example.student_attendance.config.JwtProvider;
 import com.example.student_attendance.entities.Professor;
 import com.example.student_attendance.entities.Role;
@@ -12,7 +9,11 @@ import com.example.student_attendance.entities.User;
 import com.example.student_attendance.service.ProfessorService;
 import com.example.student_attendance.service.StudentService;
 import com.example.student_attendance.service.UserService;
-import lombok.Getter;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -109,24 +110,77 @@ public class UserController {
         }
     }
 
-    @PostMapping("/signIn")
-    public HashMap<String,String> signin(@RequestBody signInDTO login){
+    @PostMapping("/login")
+    public ResponseEntity<?> loggedIn(@RequestBody LoginDTO login, HttpServletResponse response){
         User user = userService.getUserByEmail(login.getEmail());
         if (user != null && user.getPassword().equals(login.getPassword())){
+            UserAuthRequest userAuth = new UserAuthRequest(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
             List<GrantedAuthority> authorities = Collections.singletonList(
                     new SimpleGrantedAuthority("ROLE_" + user.getRole().name()) // Assuming roles are like "ADMIN", "USER"
             );
-            Authentication authentication = new UsernamePasswordAuthenticationToken(login.getEmail(), login.getPassword(),authorities);
+            Authentication authentication =
+                    new UsernamePasswordAuthenticationToken(
+                        userAuth,
+                        login.getPassword(),authorities
+                    );
             String jwt = new JwtProvider().generateToken(authentication);
-            return new HashMap<>() {{
-                put("Jwt", jwt);
-            }};
+
+
+            Cookie cookie = new Cookie("jwt", jwt);
+            cookie.setHttpOnly(true);
+            cookie.setSecure(false);
+            cookie.setPath("/");
+            cookie.setMaxAge(60000);
+            response.addCookie(cookie);
+
+
+            Map<String, Object> map = new HashMap<>();
+            map.put("message","Login Successfull. Token created");
+            map.put("user", userAuth);
+            return ResponseEntity.ok(map);
         }
-//        if ()
-        return new HashMap<>() {{
-            put("Jwt", "NON EXISTANT");
-        }};
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Failed to login");
     }
+
+
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletResponse response){
+        Cookie cookie = new Cookie("jwt", null);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Logged out successfully!");
+
+    }
+
+    @GetMapping("/protected")
+    public ResponseEntity<?> getProtectedData(HttpServletRequest request) {
+        UserAuthRequest user = JwtProvider.getUserFromJWT(extractJwtFromCookie(request));
+        System.out.println("user : " + (user));
+        return ResponseEntity.ok(user);
+    }
+
+    /**
+     * Extracts the JWT from the HTTP-only cookie in the request.
+     *
+     * @param request The HttpServletRequest object that contains the cookies.
+     * @return The JWT string if found in the cookies, or null if not found.
+     */
+    private String extractJwtFromCookie(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if ("jwt".equals(cookie.getName())) {
+                    return cookie.getValue();
+                }
+            }
+        }
+        return null;
+    }
+
 
 
 }

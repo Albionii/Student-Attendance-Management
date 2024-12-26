@@ -113,15 +113,29 @@ public class UserController {
     @PostMapping("/login")
     public ResponseEntity<?> loggedIn(@RequestBody LoginDTO login, HttpServletResponse response){
         User user = userService.getUserByEmail(login.getEmail());
-        if (user != null && user.getPassword().equals(login.getPassword())){
-            UserAuthRequest userAuth = new UserAuthRequest(user.getId(), user.getFirstName(), user.getLastName(), user.getEmail());
+        int id = user.getId();
+
+        if (user.getRole().name().equals("PROFESSOR")){
+            Professor professor = professorService.getProfessorByUserID((long) user.getId());
+            id = professor.getProfessorID();
+        }
+        else if (user.getRole().name().equals("STUDENT")){
+            Student student = studentService.getStudentByUserID((long) user.getId());
+            id = student.getStudentID();
+        }
+
+
+        if (user.getPassword().equals(login.getPassword())){
+
+            UserAuthRequest userAuth = new UserAuthRequest(id, user.getFirstName(), user.getLastName(), user.getEmail());
             List<GrantedAuthority> authorities = Collections.singletonList(
                     new SimpleGrantedAuthority("ROLE_" + user.getRole().name()) // Assuming roles are like "ADMIN", "USER"
             );
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(
                         userAuth,
-                        login.getPassword(),authorities
+                        login.getPassword(),
+                        authorities
                     );
             String jwt = new JwtProvider().generateToken(authentication);
 
@@ -130,7 +144,7 @@ public class UserController {
             cookie.setHttpOnly(true);
             cookie.setSecure(false);
             cookie.setPath("/");
-            cookie.setMaxAge(60000);
+            cookie.setMaxAge(6000);
             response.addCookie(cookie);
 
 

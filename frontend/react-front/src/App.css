@@ -2,8 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
+/* @import 'primereact/resources/themes/saga-blue/theme.css';
+@import 'primereact/resources/primereact.min.css';
+@import 'primeicons/primeicons.css'; */
+
+
 .LoginBackground{
   
 background: rgb(173,250,226);
 background: radial-gradient(circle, rgb(26, 39, 35) 0%, rgb(34, 46, 42) 64%, rgb(33, 43, 40) 100%); 
 }
+

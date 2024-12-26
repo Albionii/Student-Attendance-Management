@@ -3,6 +3,11 @@ import './App.css'
 import Start from './Pages/Start';
 import Login from './Pages/Login';
 
+import "primereact/resources/themes/saga-blue/theme.css"; // Theme
+import "primereact/resources/primereact.min.css"; // Core CSS
+import "primeicons/primeicons.css"; // Icons
+
+
 
 function App() {
   

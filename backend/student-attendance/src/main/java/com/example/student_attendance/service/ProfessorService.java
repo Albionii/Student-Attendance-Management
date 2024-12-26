@@ -54,5 +54,10 @@ public class ProfessorService {
 //        throw new RuntimeException("Profesori me kete ID nuk ekziston");
 //    }
 
+    public Professor getProfessorByUserID(Long id) {
+        return professorRepo.findByUser_Id(id);
+    }
+
+
 
 }

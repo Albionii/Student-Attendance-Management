@@ -72,5 +72,9 @@ public class StudentService {
         return studentRepository.findByUid(uid);
     }
 
+    public Student getStudentByUserID(Long id) {
+        return studentRepository.findByUser_Id(id);
+    }
+
 
 }

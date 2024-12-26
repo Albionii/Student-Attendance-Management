@@ -6,13 +6,8 @@ const LoginForm = ({loggedIn, getToken}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const logout = () => {
-    setEmail('');
-    setPassword('');
-  }
-
   const findUser = () => {
-    const response = axios
+    axios
     .post("http://localhost:8080/user/login", {email, password},{withCredentials: true})
     .then((response) => {
       getToken(response.data.user);

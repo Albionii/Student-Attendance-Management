@@ -15,6 +15,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -129,7 +130,7 @@ public class UserController {
 
             UserAuthRequest userAuth = new UserAuthRequest(id, user.getFirstName(), user.getLastName(), user.getEmail());
             List<GrantedAuthority> authorities = Collections.singletonList(
-                    new SimpleGrantedAuthority("ROLE_" + user.getRole().name()) // Assuming roles are like "ADMIN", "USER"
+                    new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
             );
             Authentication authentication =
                     new UsernamePasswordAuthenticationToken(
@@ -165,9 +166,7 @@ public class UserController {
         cookie.setPath("/");
         cookie.setMaxAge(0);
         response.addCookie(cookie);
-
         return ResponseEntity.ok("Logged out successfully!");
-
     }
 
     @GetMapping("/protected")

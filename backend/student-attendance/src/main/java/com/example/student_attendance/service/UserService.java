@@ -4,6 +4,8 @@ import com.example.student_attendance.entities.User;
 import com.example.student_attendance.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +18,7 @@ public class UserService {
     @Autowired
     private final UserRepo userRepo;
 
+    @Cacheable(value = "userCache",key = "#id")
     public Optional<User> getUserById(Long id){
         return userRepo.findById(id);
     }
@@ -24,6 +27,7 @@ public class UserService {
         return userRepo.findUserByEmail(email);
     }
 
+    @CacheEvict(value = "userCache", key = "#id")
     public User updateUserById (Long id, String firstName, String lastName){
         Optional<User> oldUser = getUserById(id);
         if (oldUser.isPresent()){

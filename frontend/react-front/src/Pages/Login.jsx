@@ -1,17 +1,22 @@
 import axios from 'axios';
-import React , { useState }  from 'react'
+import React , { useEffect, useState }  from 'react'
 import { readTokenData } from '../ReadToken';
+import { useNavigate } from 'react-router-dom';
 
-const LoginForm = ({loggedIn, getToken}) => {
+const LoginForm = ({sendUserData}) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
+
+  
 
   const findUser = () => {
     axios
     .post("http://localhost:8080/user/login", {email, password},{withCredentials: true})
     .then((response) => {
-      getToken(response.data.user);
-      loggedIn();
+      sendUserData(response.data.user);
+      navigate("/home");
     })
     .catch((error) => {
       if (error.response){

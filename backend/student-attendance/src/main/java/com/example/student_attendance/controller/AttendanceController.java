@@ -1,5 +1,6 @@
 package com.example.student_attendance.controller;
 
+import com.example.student_attendance.config.annotation.CookieValidated;
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Ligjerata;
 import com.example.student_attendance.entities.Student;
@@ -77,6 +78,7 @@ public class AttendanceController  {
     }
 
     @GetMapping("/findAttendances/{id}")
+    @CookieValidated
     public ResponseEntity<List<Attendance>> getAttendanceFromLigjerataID(@PathVariable Long id) {
         return ResponseEntity.ok(attendanceService.getAllAttendencesByLigjerataID(id));
     }
@@ -116,6 +118,12 @@ public class AttendanceController  {
             //? If Student does not exist in database inform arduino.
             notificationWebSocketHandler.sendCommandToArduino(false);
         }
+    }
+
+    @GetMapping("/findByProfessor/{id}")
+    @CookieValidated
+    public ResponseEntity<List<Attendance>> getAllAttendancesOfProfessor(@PathVariable Long id) {
+        return ResponseEntity.ok(attendanceService.getAllByProfessorID(id));
     }
 
 }

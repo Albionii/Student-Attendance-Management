@@ -69,4 +69,8 @@ public class AttendanceService {
         arduinoConnection.stopReading();
     }
 
+    public List<Attendance> getAllByProfessorID(Long id) {
+        return attendanceRepo.findAllByProfessorID(id);
+    }
+
 }

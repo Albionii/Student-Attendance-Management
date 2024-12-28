@@ -1,7 +1,11 @@
 import React from 'react'
+import NavBar from '../Component/NavBar'
 
-export default function AboutMe() {
+export default function AboutMe({userData}) {
   return (
-    <div>AboutMe</div>
+    <>
+      <NavBar userData={userData}/>
+      <p>About me</p>
+    </>
   )
 }

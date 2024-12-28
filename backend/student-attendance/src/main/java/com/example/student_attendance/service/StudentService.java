@@ -2,8 +2,6 @@ package com.example.student_attendance.service;
 
 import com.example.student_attendance.entities.Ligjerata;
 import com.example.student_attendance.entities.Student;
-import com.example.student_attendance.entities.User;
-import com.example.student_attendance.repository.AttendanceRepo;
 import com.example.student_attendance.repository.LigjerataRepo;
 import com.example.student_attendance.repository.StudentRepo;
 import com.example.student_attendance.repository.UserRepo;
@@ -43,25 +41,6 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-//    public User updateStudentByID(Long id, Student newStudent) {
-//        Optional<User> oldUser = userRepo.findById(id);
-//        if (oldUser.isPresent()){
-//            User user = oldUser.get();
-//            String firstName = userRepo.findById((Long.valueOf(newStudent.getStudentID()))).get().getFirstName();
-//            String lastName = userRepo.findById((Long.valueOf(newStudent.getStudentID()))).get().getLastName();
-//
-////           Kur emri ose mbiemri te jene zbrazet mos ta ndryshojne vleren ne databaze objektit.
-//            if (user.getFirstName() != null){
-//                user.setFirstName(firstName);
-//            }
-//            if (user.getLastName() != null) {
-//                user.setLastName(lastName);
-//            }
-//            return userRepo.save(user);
-//        }
-//        throw new RuntimeException("Studenti me kete ID nuk ekziston");
-//    }
-
     public List<Student> getAllStudentsByLigjerataID(Long ligjerataID) {
         Optional<Ligjerata> ligjerata = ligjerataRepo.findById(ligjerataID);
         System.out.println(ligjerata.get().getStudents());
@@ -76,5 +55,9 @@ public class StudentService {
         return studentRepository.findByUser_Id(id);
     }
 
+    public List<Student> getAllStudentInLigjerate(Long id) {
+        Optional<Ligjerata> ligjerata = ligjerataRepo.findById(id);
+        return studentRepository.findByLigjerata(ligjerata.orElse(null));
+    }
 
 }

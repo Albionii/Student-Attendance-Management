@@ -145,7 +145,7 @@ public class UserController {
             cookie.setHttpOnly(true);
             cookie.setSecure(false);
             cookie.setPath("/");
-            cookie.setMaxAge(6000);
+            cookie.setMaxAge(20);
             response.addCookie(cookie);
 
 
@@ -170,11 +170,16 @@ public class UserController {
     }
 
     @GetMapping("/protected")
-    public ResponseEntity<?> getProtectedData(HttpServletRequest request) {
-        UserAuthRequest user = JwtProvider.getUserFromJWT(extractJwtFromCookie(request));
-        System.out.println("user : " + (user));
-        return ResponseEntity.ok(user);
+    public ResponseEntity<?> getProtectedData(@CookieValue(name = "jwt", defaultValue = "") String jwt) {
+        if (!jwt.isEmpty()){
+            UserAuthRequest user = JwtProvider.getUserFromJWT(jwt);
+            return ResponseEntity.ok(user);
+        }
+
+
+        return ResponseEntity.ok("No cookie");
     }
+
 
     /**
      * Extracts the JWT from the HTTP-only cookie in the request.

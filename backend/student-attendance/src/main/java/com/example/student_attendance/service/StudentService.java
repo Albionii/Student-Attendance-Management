@@ -6,6 +6,8 @@ import com.example.student_attendance.repository.LigjerataRepo;
 import com.example.student_attendance.repository.StudentRepo;
 import com.example.student_attendance.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,6 +24,7 @@ public class StudentService {
         return studentRepository.save(student);
     }
 
+    @CacheEvict(value = "studentCache",key = "#id")
     public void deleteStudentByID(Long studentID) {
         if (studentRepository.existsById(studentID)){
             studentRepository.deleteById(studentID);
@@ -30,6 +33,7 @@ public class StudentService {
         throw new RuntimeException("Studenti me kete ID nuk ekziston");
     }
 
+    @Cacheable(value = "studentCache",key = "#id")
     public Optional<Student> getStudentByID(Long id) {
         if (studentRepository.existsById(id)){
             return studentRepository.findById(id);
@@ -47,10 +51,12 @@ public class StudentService {
         return ligjerata.isPresent() ? ligjerata.get().getStudents() : null;
     }
 
+    @Cacheable(value = "studentCache",key = "#uid")
     public Optional<Student> getStudentByUID(String uid) {
         return studentRepository.findByUid(uid);
     }
 
+    @Cacheable(value = "studentByUserIdCache",key = "#id")
     public Student getStudentByUserID(Long id) {
         return studentRepository.findByUser_Id(id);
     }

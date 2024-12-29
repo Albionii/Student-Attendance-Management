@@ -43,12 +43,18 @@ public class NotificationWebSocketHandler extends TextWebSocketHandler {
 
 
     public void sendCommandToArduino(boolean isGreen) {
-        if (!NfcScannerApplication.serialPort.isOpen()) {
-            if (!NfcScannerApplication.serialPort.openPort()) {
-                System.out.println("Failed to open serial port.");
-                return;
+        try {
+            if (!NfcScannerApplication.serialPort.isOpen()) {
+                if (!NfcScannerApplication.serialPort.openPort()) {
+                    System.out.println("Failed to open serial port.");
+                    return;
+                }
             }
+        }catch (Exception e){
+            System.out.println("VIRTUALISED");
+            return;
         }
+
 
         byte LED = (byte)(isGreen ? '1': '0');
 

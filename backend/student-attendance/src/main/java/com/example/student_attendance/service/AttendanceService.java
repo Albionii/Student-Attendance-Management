@@ -2,7 +2,7 @@ package com.example.student_attendance.service;
 
 import com.example.student_attendance.entities.Attendance;
 import com.example.student_attendance.entities.Student;
-import com.example.student_attendance.port.ArduinoConnection;
+//import com.example.student_attendance.port.ArduinoConnection;
 import com.example.student_attendance.repository.AttendanceRepo;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,7 @@ public class AttendanceService {
     private final AttendanceRepo attendanceRepo;
     public static String id;
 
-    private ArduinoConnection arduinoConnection = new ArduinoConnection("COM5", 9600);
+//    private ArduinoConnection arduinoConnection = new ArduinoConnection("COM5", 9600);
 
     public Attendance createAttendance(Attendance attendance) {
         return attendanceRepo.save(attendance);
@@ -65,9 +65,9 @@ public class AttendanceService {
         return attendanceRepo.findAllByLigjerata_Id(ligjerataID);
     }
 
-    public void closeThread() {
-        arduinoConnection.stopReading();
-    }
+//    public void closeThread() {
+//        arduinoConnection.stopReading();
+//    }
 
     public List<Attendance> getAllByProfessorID(Long id) {
         return attendanceRepo.findAllByProfessorID(id);

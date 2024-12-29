@@ -40,6 +40,7 @@ public class UserService {
         throw new RuntimeException("Useri me ket Id nuk ekziston");
     }
 
+    @Cacheable(value = "emailUserCache", key = "#email")
     public User getUserByEmail(String email) {
         return userRepo.findUserByEmail(email);
     }
@@ -50,6 +51,7 @@ public class UserService {
     public Optional<User> findUserById(Long id){
         return userRepo.findById(id);
     }
+
 
     public User createUser(User user){
         return userRepo.save(user);

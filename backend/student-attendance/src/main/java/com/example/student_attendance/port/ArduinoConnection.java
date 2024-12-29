@@ -12,6 +12,7 @@ public class ArduinoConnection extends Thread {
     private NfcTagListener nfcTagListener; // Listener for scanned data
 
     public ArduinoConnection(String arduinoPort, int baudRate) {
+
         serialPort = SerialPort.getCommPort(arduinoPort);
         // Configure port settings
         serialPort.setComPortParameters(baudRate, 8, 1, 0);

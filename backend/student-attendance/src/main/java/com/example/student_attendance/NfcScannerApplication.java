@@ -20,7 +20,13 @@ public class NfcScannerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) {
         // Open the serial port
-        serialPort = SerialPort.getCommPort(portName);
+        try {
+            serialPort = SerialPort.getCommPort(portName);
+        }catch (Exception e){
+            System.out.println("This is virtualised");
+            return;
+        }
+
         serialPort.setBaudRate(baudRate);
 
         if (!serialPort.openPort()) {

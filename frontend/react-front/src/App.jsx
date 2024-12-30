@@ -12,6 +12,7 @@ import {BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router
 import Studentet from './Component/Studentet';
 import AboutMe from './Pages/AboutMe';
 import ErrorAlert from './error/ErrorAlert';
+import SwaggerUi from './Pages/SwaggerUi';
 
 
 
@@ -64,6 +65,10 @@ function App() {
         <Route
           path="/about"
           element={userData ? <AboutMe userData={userData} /> : <div>Loading...</div>}
+        />
+        <Route
+          path="/swaggerui"
+          element={userData ? <SwaggerUi /> : <div>Loading...</div>}
         />
       </Routes>
     </div>

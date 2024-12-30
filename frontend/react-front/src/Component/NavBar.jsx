@@ -98,12 +98,20 @@ function NavBar({userData}) {
                 About Me
               </MenuItem>
             </div>
+
+            <div onClick={()=>navigateTo("/swaggerui")}>
+              <MenuItem icon={<HiLogout />} >
+                Swagger Ui
+              </MenuItem>
+            </div>
             
             <div onClick={handleConfirmLogout}>
               <MenuItem icon={<HiLogout />} >
                 Logout
               </MenuItem>
             </div>
+
+
           </Menu>
         </Sidebar>
       </div>

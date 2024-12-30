@@ -35,7 +35,7 @@ public class UserController {
     private final ProfessorService professorService;
 
 
-    @PostMapping("/updateUser/{id}")
+    @PutMapping("/updateUser/{id}")
     public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody NameRequest nameRequest) {
         try {
             userService.updateUserById(id, nameRequest.getFirstName(), nameRequest.getLastName());

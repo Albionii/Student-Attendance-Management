@@ -70,14 +70,14 @@ public class UserController {
             newStudent.setUser(createdUser);
             newStudent.setUid(student.getUid());
             studentService.createStudent(newStudent);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(student.getEmail(), student.getPassword());
-            String jwt = new JwtProvider().generateToken(authentication);
+//            Authentication authentication = new UsernamePasswordAuthenticationToken(student.getEmail(), student.getPassword());
+//            String jwt = new JwtProvider().generateToken(authentication);
             return new HashMap<>() {{
-                put("Jwt", jwt);
+                put("Student", "Created");
             }};
         } else {
             return new HashMap<>() {{
-                put("Jwt", "NOT Valid");
+                put("Student", "NOT Created");
             }};
 
         }
@@ -97,16 +97,26 @@ public class UserController {
             Professor newProfessor = new Professor();
             newProfessor.setUser(createdUser);
             professorService.createProfessor(newProfessor);
-            Authentication authentication = new UsernamePasswordAuthenticationToken(professor.getEmail(), professor.getPassword());
-            String jwt = new JwtProvider().generateToken(authentication);
+//            int id = profId.getProfessorID();
+//            UserAuthRequest userAuth = new UserAuthRequest(id, professor.getFirstName(), professor.getLastName(), professor.getEmail());
+//            List<GrantedAuthority> authorities = Collections.singletonList(
+//                    new SimpleGrantedAuthority("ROLE_" + "PROFESSOR")
+//            );
+//            Authentication authentication =
+//                    new UsernamePasswordAuthenticationToken(
+//                            userAuth,
+//                            professor.getPassword(),
+//                            authorities
+//                    );
+//            String jwt = new JwtProvider().generateToken(authentication);
             return new HashMap<>() {{
-                put("Jwt", jwt);
+                put("Professor ", "Created Succesfully");
             }};
 
 
         } else {
             return new HashMap<>() {{
-                put("Jwt", "NOT Valid");
+                put("Professor", "NOT Created");
             }};
         }
     }

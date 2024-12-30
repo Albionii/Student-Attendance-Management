@@ -30,9 +30,18 @@ services:
       SPRING_DATASOURCE_PASSWORD:
     privileged: true
     depends_on:
-      - db
+      db:
+        condition: service_started
     devices:
       - "/dev/ttyUSB2"
+
+  front:
+    build:
+      context: ../../frontend/react-front
+      dockerfile: Dockerfile
+    container_name: frontendcompose
+    ports:
+      - "5173:5173"
 
 # Define the volume here
 volumes:

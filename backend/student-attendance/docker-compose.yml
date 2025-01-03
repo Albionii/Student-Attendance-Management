@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   prometheus:
     image: prom/prometheus
@@ -9,17 +11,26 @@ services:
     networks:
       - prometheus-grafana-network
   grafana:
-    image: grafana/grafana
-    container_name: grafana-container
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    networks:
-      - prometheus-grafana-network
-
-
+      image: grafana/grafana
+      container_name: grafana-container
+      ports:
+        - "3000:3000"
+      environment:
+        - GF_SECURITY_ADMIN_USER=admin
+        - GF_SECURITY_ADMIN_PASSWORD=admin
+      networks:
+        - prometheus-grafana-network
+  ubuntu:
+    image: ubuntu:latest  # Use the latest Ubuntu image
+    container_name: ubuntu_container
+    tty: true             # Keeps the container running
+    stdin_open: true      # Allows interactive shell
+    privileged: true
+    devices:
+      #- /dev/dri/renderD128 # for intel hwaccel, needs to be updated for your hardware
+      - /dev/ttyUSB0 # passes the USB Coral, needs to be modified for other versions
+    command: [ "/bin/bash" ]
+    entrypoint: [ "/bin/bash", "-c", "apt update && apt install -y usbutils && bash" ]
 
   db:
     image: mysql:latest
@@ -35,7 +46,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - db_data:/var/lib/mysql
+      - db_data:/var/lib/mysql # Mounts a volume to persist database data
 
   app:
     build:
@@ -43,22 +54,27 @@ services:
       dockerfile: Dockerfile
     container_name: app-container
     ports:
-      - '8080:8080'
+      - '8080:8080' # Adjust according to your application's requirements
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/student-attendance?autoReconnect=true&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD:
     privileged: true
     depends_on:
-      - db
+      db:
+        condition: service_started
     devices:
       - "/dev/ttyUSB2"
 
+  front:
+    build:
+      context: ../../frontend/react-front
+      dockerfile: Dockerfile
+    container_name: frontendcompose
+    ports:
+      - "5173:5173"
+
+# Define the volume here
 volumes:
   db_data:
     driver: local
-
-networks:
-  prometheus-grafana-network:
-
-

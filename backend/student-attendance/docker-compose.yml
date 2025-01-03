@@ -1,25 +1,37 @@
-version: '3.8'
 
 services:
   prometheus:
     image: prom/prometheus
-    container_name: prometheus-container
     ports:
-      - "9090:9090"
+      - '9090:9090'
     volumes:
       - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
-    networks:
-      - prometheus-grafana-network
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    restart: always
   grafana:
       image: grafana/grafana
-      container_name: grafana-container
       ports:
-        - "3000:3000"
-      environment:
-        - GF_SECURITY_ADMIN_USER=admin
-        - GF_SECURITY_ADMIN_PASSWORD=admin
-      networks:
-        - prometheus-grafana-network
+        - '3000:3000'
+      depends_on:
+        - prometheus
+      restart: always
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node-exporter
+    restart: unless-stopped
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.rootfs=/rootfs'
+      - '--path.sysfs=/host/sys'
+      - '--collector.filesystem.mount-points-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - '9100:9100'
+
   ubuntu:
     image: ubuntu:latest  # Use the latest Ubuntu image
     container_name: ubuntu_container
@@ -78,3 +90,11 @@ services:
 volumes:
   db_data:
     driver: local
+  prometheus-data:
+    driver: local
+  grafana-data:
+    driver: local
+networks:
+  monitoring:
+    driver: bridge
+

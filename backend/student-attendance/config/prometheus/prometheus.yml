@@ -1,9 +1,7 @@
 global:
   scrape_interval: 15s
-
 scrape_configs:
-  - job_name: 'prometheus-grafana'
-    scrape_interval: 5s
-    metrics_path: '/actuator/prometheus'
+  - job_name: 'apache'
     static_configs:
-      - targets: ['host.docker.internal:8080']  # Correct address for Docker host
+      - targets: ['grafana:3000']
+      - targets: ['node-exporter:9100']

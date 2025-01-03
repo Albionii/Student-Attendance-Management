@@ -58,6 +58,10 @@ public class ProfessorService {
         return professorRepo.findByUser_Id(id);
     }
 
+    public Long getNumberOfProfessors(){
+        return professorRepo.countProfessors();
+    }
+
 
 
 }

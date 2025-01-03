@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -45,11 +46,6 @@ public class StudentService {
         return studentRepository.findAll();
     }
 
-    public List<Student> getAllStudentsByLigjerataID(Long ligjerataID) {
-        Optional<Ligjerata> ligjerata = ligjerataRepo.findById(ligjerataID);
-        System.out.println(ligjerata.get().getStudents());
-        return ligjerata.isPresent() ? ligjerata.get().getStudents() : null;
-    }
 
     @Cacheable(value = "studentCache",key = "#uid")
     public Optional<Student> getStudentByUID(String uid) {
@@ -61,9 +57,9 @@ public class StudentService {
         return studentRepository.findByUser_Id(id);
     }
 
-    public List<Student> getAllStudentInLigjerate(Long id) {
-        Optional<Ligjerata> ligjerata = ligjerataRepo.findById(id);
-        return studentRepository.findByLigjerata(ligjerata.orElse(null));
+    public Long getNumberOfStudents(){
+        return studentRepository.countStudents();
     }
+
 
 }

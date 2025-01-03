@@ -1,5 +1,6 @@
 package com.example.student_attendance.controller;
 
+import com.example.student_attendance.config.annotation.CookieValidated;
 import com.example.student_attendance.entities.Professor;
 import com.example.student_attendance.service.ProfessorService;
 import com.example.student_attendance.service.StudentService;
@@ -51,13 +52,10 @@ public class ProfessorController {
         return ResponseEntity.ok(professorService.getAllProfessors());
     }
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<?> updateProfessor(@PathVariable Long id, @RequestBody Professor newProfessor) {
-//        try {
-//            return ResponseEntity.ok(studentService.updateStudentByID(id, newProfessor));
-//        } catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        }
-//    }
+    @GetMapping("/count")
+    @CookieValidated
+    public ResponseEntity<Long> getNumberOfProfessors(){
+        return ResponseEntity.ok(professorService.getNumberOfProfessors());
+    }
 
 }

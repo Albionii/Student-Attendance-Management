@@ -21,20 +21,13 @@ public class Student {
     @Column(unique = true)
     private String uid;
 
-
-
     private int currentAttendanceID;
 
-    @ManyToMany
-    @JoinTable(
-            name = "student_ligjerata",  // Name of the join table
-            joinColumns = @JoinColumn(name = "student_id"),  // Foreign key for Student
-            inverseJoinColumns = @JoinColumn(name = "ligjerata_id")  // Foreign key for Ligjerata
-    )
-    private List<Ligjerata> ligjerata;
     @JsonIgnore
     @OneToMany(mappedBy = "student")
     private Set<Attendance> attendances;
 
-
+    @JsonIgnore
+    @OneToMany(mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StudentLigjerata> studentLigjerata;
 }

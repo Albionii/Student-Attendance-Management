@@ -9,7 +9,7 @@ import NavBar from './NavBar';
 import ErrorAlert from '../error/ErrorAlert';
 
 
-function Studentet({userData}) {
+function Professor({userData}) {
 
   const [showPopUp, setShowPopUp] = useState(false);  
   
@@ -178,4 +178,4 @@ function Studentet({userData}) {
     )
 }
 
-export default Studentet
+export default Professor

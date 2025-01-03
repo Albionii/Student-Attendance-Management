@@ -16,6 +16,7 @@ public interface StudentRepo extends JpaRepository<Student, Long> {
     Optional<Student> findByUid(String uid);
     Student findByUser_Id(Long id);
 
-//    @Query("SELECT s FROM Student s JOIN s.ligjerata l WHERE l.id = :ligjerataId")
-    List<Student> findByLigjerata(Ligjerata ligjerata);
+    @Query("SELECT COUNT(s) FROM Student s")
+    Long countStudents();
+
 }

@@ -73,4 +73,8 @@ public class AttendanceService {
         return attendanceRepo.findAllByProfessorID(id);
     }
 
+    public List<Attendance> getAllAttendancesOfStudentByID(Long id) {
+        return attendanceRepo.findByStudent_StudentID(id);
+    }
+
 }

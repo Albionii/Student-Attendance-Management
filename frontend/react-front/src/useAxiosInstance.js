@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export function useAxiosInstance({handleShow}) {
+export function useAxiosInstance({handleShow = null}) {
 
   const axiosInstance = axios.create({
     baseURL: "http://localhost:8080", 

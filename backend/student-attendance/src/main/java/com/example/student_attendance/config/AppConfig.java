@@ -19,21 +19,34 @@ import java.util.Collections;
 @Configuration
 @EnableWebSecurity
 public class AppConfig {
+//    @Bean
+//    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+//        http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//                .authorizeHttpRequests(Authorize -> Authorize
+//                        .requestMatchers("/actuator/**").permitAll()
+//                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
+//                        .requestMatchers("/api/professor/**").hasAnyRole("PROFESSOR")
+//                        .requestMatchers("/api/student/**").hasAnyRole("STUDENT")
+//                        .requestMatchers("/api/**").authenticated()
+//                        .anyRequest().permitAll()
+//                ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+//                .csrf(csrf -> csrf.disable())
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+//
+//        return http.build();
+//    }
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.sessionManagement(management -> management.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(Authorize -> Authorize
-                        .requestMatchers("/api/admin/**").hasAnyRole("ADMIN")
-                        .requestMatchers("/api/professor/**").hasAnyRole("PROFESSOR")
-                        .requestMatchers("/api/student/**").hasAnyRole("STUDENT")
-                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
-                ).addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
+                )
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         return http.build();
     }
+
 
     private CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
@@ -47,6 +60,7 @@ public class AppConfig {
                         "http://localhost:80",
                         "http://localhost:5173",
                         "http://localhost:5179"
+
 
                 )
                 );

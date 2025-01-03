@@ -25,3 +25,16 @@ spring:
 
   application:
     name: Student Attendance System
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: *
+#  endpoint:
+#    metrics:
+#      enabled: true
+#    prometheus:
+#      enabled: true
+#    beans:
+#      enabled: true

@@ -38,7 +38,6 @@ public class Ligjerata {
     private Set<Attendance> attendances;
 
     @JsonIgnore
-    @ManyToMany(mappedBy = "ligjerata")
-    private List<Student> students;
-
+    @OneToMany(mappedBy = "ligjerata", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<StudentLigjerata> studentLigjerata;
 }

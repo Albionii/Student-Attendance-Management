@@ -1,12 +1,16 @@
 import React from 'react'
-import Studentet from '../Component/Studentet'
-import {useLocation } from 'react-router-dom'
+import Student from '../Component/Student'
+import Professor from '../Component/Professor'
+import Admin from '../Component/Admin'
 
 function Start({userData}) { 
-
   return (
     <>
-      <Studentet userData={userData}/>
+      {userData.role == "PROFESSOR" && <Professor userData={userData}/> }
+      {userData.role == "STUDENT" && <Student userData={userData}/> }
+      {userData.role == "ADMIN" && <Admin userData={userData}/> }
+
+      
     </>
   )
 }

@@ -15,7 +15,6 @@ public class Professor {
     private int professorID;
 
 
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     private User user;
 

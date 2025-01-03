@@ -62,4 +62,9 @@ public class LigjerataController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getAllNumberOfLigjerata() {
+        return ResponseEntity.ok(ligjerataService.getNumberOfLigjerata());
+    }
 }

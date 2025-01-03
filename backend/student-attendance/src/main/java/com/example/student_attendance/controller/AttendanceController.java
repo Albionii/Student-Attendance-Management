@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.socket.WebSocketSession;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -124,6 +123,13 @@ public class AttendanceController  {
     @CookieValidated
     public ResponseEntity<List<Attendance>> getAllAttendancesOfProfessor(@PathVariable Long id) {
         return ResponseEntity.ok(attendanceService.getAllByProfessorID(id));
+    }
+
+    @GetMapping("/findByStudent/{id}")
+    @CookieValidated
+    public ResponseEntity<?> getAllAttendancesOfStudent(@PathVariable Long id){
+        List<Attendance> attendances = attendanceService.getAllAttendancesOfStudentByID(id);
+        return ResponseEntity.ok(attendances);
     }
 
 }

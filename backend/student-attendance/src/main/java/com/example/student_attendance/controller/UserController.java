@@ -57,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping("/createStudent")
-    public HashMap<String, String> createStudent(@RequestBody CreateStudentDTO student) {
+    public ResponseEntity<?> createStudent(@RequestBody CreateStudentDTO student) {
         if ((userService.getUserByEmail(student.getEmail()) == null) && (studentService.getStudentByUID(student.getUid()).isEmpty())) {
             User newUser = new User();
             newUser.setLastName(student.getLastName());
@@ -70,22 +70,14 @@ public class UserController {
             newStudent.setUser(createdUser);
             newStudent.setUid(student.getUid());
             studentService.createStudent(newStudent);
-//            Authentication authentication = new UsernamePasswordAuthenticationToken(student.getEmail(), student.getPassword());
-//            String jwt = new JwtProvider().generateToken(authentication);
-            return new HashMap<>() {{
-                put("Student", "Created");
-            }};
-        } else {
-            return new HashMap<>() {{
-                put("Student", "NOT Created");
-            }};
-
+            return ResponseEntity.ok("Student created");
         }
+        return ResponseEntity.ok("Student not created");
 
     }
 
     @PostMapping("/createProfessor")
-    public HashMap<String, String> createProfessor(@RequestBody CreateProfessorDTO professor) {
+    public ResponseEntity<?> createProfessor(@RequestBody CreateProfessorDTO professor) {
         if (userService.getUserByEmail(professor.getEmail()) == null) {
             User newUser = new User();
             newUser.setLastName(professor.getLastName());
@@ -97,28 +89,9 @@ public class UserController {
             Professor newProfessor = new Professor();
             newProfessor.setUser(createdUser);
             professorService.createProfessor(newProfessor);
-//            int id = profId.getProfessorID();
-//            UserAuthRequest userAuth = new UserAuthRequest(id, professor.getFirstName(), professor.getLastName(), professor.getEmail());
-//            List<GrantedAuthority> authorities = Collections.singletonList(
-//                    new SimpleGrantedAuthority("ROLE_" + "PROFESSOR")
-//            );
-//            Authentication authentication =
-//                    new UsernamePasswordAuthenticationToken(
-//                            userAuth,
-//                            professor.getPassword(),
-//                            authorities
-//                    );
-//            String jwt = new JwtProvider().generateToken(authentication);
-            return new HashMap<>() {{
-                put("Professor ", "Created Succesfully");
-            }};
-
-
-        } else {
-            return new HashMap<>() {{
-                put("Professor", "NOT Created");
-            }};
+            return ResponseEntity.ok("Professor created successfully");
         }
+        return ResponseEntity.ok("Account creation failed");
     }
 
     @PostMapping("/login")
@@ -138,7 +111,7 @@ public class UserController {
 
         if (user.getPassword().equals(login.getPassword())){
 
-            UserAuthRequest userAuth = new UserAuthRequest(id, user.getFirstName(), user.getLastName(), user.getEmail());
+            UserAuthRequest userAuth = new UserAuthRequest(id, user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole().toString());
             List<GrantedAuthority> authorities = Collections.singletonList(
                     new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
             );
@@ -155,7 +128,7 @@ public class UserController {
             cookie.setHttpOnly(true);
             cookie.setSecure(false);
             cookie.setPath("/");
-            cookie.setMaxAge(20);
+            cookie.setMaxAge(15*60);
             response.addCookie(cookie);
 
 

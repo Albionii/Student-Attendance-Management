@@ -3,6 +3,7 @@ package com.example.student_attendance.config;
 import javax.crypto.SecretKey;
 
 import com.example.student_attendance.DTO.UserAuthRequest;
+import com.example.student_attendance.entities.Role;
 import com.example.student_attendance.entities.User;
 import com.example.student_attendance.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -33,7 +34,7 @@ public class JwtProvider {
 
 
         String jwt = Jwts.builder().setIssuedAt(new Date(new Date().getTime()))
-                .setExpiration((new Date(Date.from(Instant.now()).getTime()+60000)))
+                .setExpiration((new Date(Date.from(Instant.now()).getTime()+ 15*60*1000)))
                 .claim("user", user)
                 .claim("authorities", roles)
                 .signWith(key)
@@ -74,7 +75,8 @@ public class JwtProvider {
                 String firstName = (String) userClaims.get("firstName");
                 String lastName = (String) userClaims.get("lastName");
                 String email = (String) userClaims.get("email");
-                return new UserAuthRequest(id, firstName, lastName, email);
+                String role = userClaims.get("role").toString();
+                return new UserAuthRequest(id, firstName, lastName, email, role);
             }
         }
         return null;

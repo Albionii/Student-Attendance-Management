@@ -56,4 +56,8 @@ public class LigjerataService {
     public List<Ligjerata> getAllLigjeratatByProfessorID(Long id) {
         return ligjerataRepo.findAllByProfessor_ProfessorID(id);
     }
+
+    public Long getNumberOfLigjerata(){
+        return ligjerataRepo.countLigjeratat();
+    }
 }

@@ -13,4 +13,6 @@ public interface AttendanceRepo extends JpaRepository<Attendance, Long> {
 
     @Query("SELECT a FROM Attendance a WHERE a.ligjerata.professor.id = :professorId")
     List<Attendance> findAllByProfessorID(@Param("professorId") Long professorId);
+
+    List<Attendance> findByStudent_StudentID(Long id);
 }

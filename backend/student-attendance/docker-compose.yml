@@ -1,6 +1,26 @@
-version: '3.8'
-
 services:
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus-container
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./config/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - prometheus-grafana-network
+  grafana:
+    image: grafana/grafana
+    container_name: grafana-container
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    networks:
+      - prometheus-grafana-network
+
+
+
   db:
     image: mysql:latest
     container_name: db_local
@@ -15,7 +35,7 @@ services:
     ports:
       - '3306:3306'
     volumes:
-      - db_data:/var/lib/mysql # Mounts a volume to persist database data
+      - db_data:/var/lib/mysql
 
   app:
     build:
@@ -23,27 +43,22 @@ services:
       dockerfile: Dockerfile
     container_name: app-container
     ports:
-      - '8080:8080' # Adjust according to your application's requirements
+      - '8080:8080'
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/student-attendance?autoReconnect=true&createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD:
     privileged: true
     depends_on:
-      db:
-        condition: service_started
+      - db
     devices:
       - "/dev/ttyUSB2"
 
-  front:
-    build:
-      context: ../../frontend/react-front
-      dockerfile: Dockerfile
-    container_name: frontendcompose
-    ports:
-      - "5173:5173"
-
-# Define the volume here
 volumes:
   db_data:
     driver: local
+
+networks:
+  prometheus-grafana-network:
+
+

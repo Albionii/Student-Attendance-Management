@@ -5,7 +5,8 @@ import {
   HiLogout, 
   HiInformationCircle, 
   HiOutlinePresentationChartBar, 
-  HiOutlineHome
+  HiOutlineHome,
+  HiAcademicCap
  } from "react-icons/hi";
 import {useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -44,13 +45,13 @@ function NavBar({userData}) {
   return (
     <>
       <ErrorAlert type={0} show={showPopUp} onConfirmLogout={handleLogOut} closeShow={handleCloseShow}/>
-      <div className="flex h-screen">
+      <div className="min-h-screen flex">
         
         <Sidebar
           collapsed={isCollapsed}
           className=" text-white transition-all duration-300"
           backgroundColor='black'
-          style={{ height: "100vh" }}
+          style={{ minHeight: "100vh" }}
         >
           <Menu  
             menuItemStyles={{
@@ -87,24 +88,37 @@ function NavBar({userData}) {
               </MenuItem>
             </div>
 
+            {userData.role != "ADMIN" && 
+              <div onClick={()=>navigateTo("/about")}>
+                <MenuItem className='hover:text-red-950' icon={<HiInformationCircle />}>
+                  About Me
+                </MenuItem>
+              </div>
+            }
+
             <div onClick={()=>navigateTo("/statistics")}>
               <MenuItem className='hover:text-red-950' icon={<HiOutlinePresentationChartBar />}>
                 Statistics
               </MenuItem>
             </div>
 
-            <div onClick={()=>navigateTo("/about")}>
-              <MenuItem className='hover:text-red-950' icon={<HiInformationCircle />}>
-                About Me
-              </MenuItem>
-            </div>
+            {userData.role == "ADMIN" && 
+              <div onClick={()=>navigateTo("/swaggerui")}>
+                <MenuItem icon={<HiLogout />} >
+                  Swagger Ui
+                </MenuItem>
+              </div>
 
-            <div onClick={()=>navigateTo("/swaggerui")}>
-              <MenuItem icon={<HiLogout />} >
-                Swagger Ui
-              </MenuItem>
-            </div>
-            
+            }
+
+            {userData.role == "ADMIN" && 
+              <div onClick={()=>navigateTo("/create")}>
+                <MenuItem icon={<HiAcademicCap/>} >
+                  Create Account
+                </MenuItem>
+              </div>
+            }
+
             <div onClick={handleConfirmLogout}>
               <MenuItem icon={<HiLogout />} >
                 Logout

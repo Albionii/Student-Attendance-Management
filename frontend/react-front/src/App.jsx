@@ -9,10 +9,10 @@ import "primeicons/primeicons.css"; // Icons
 
 import axios from 'axios';
 import {BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
-import Studentet from './Component/Studentet';
 import AboutMe from './Pages/AboutMe';
-import ErrorAlert from './error/ErrorAlert';
 import SwaggerUi from './Pages/SwaggerUi';
+import StudentChart from './Pages/StudentChart';
+import CreateUser from './Pages/CreateUser';
 
 
 
@@ -65,6 +65,16 @@ function App() {
         <Route
           path="/about"
           element={userData ? <AboutMe userData={userData} /> : <div>Loading...</div>}
+        />
+        
+        <Route
+          path="/statistics"
+          element={userData ? <StudentChart userData={userData} /> : <div>Loading...</div>}
+        />
+
+        <Route
+          path="/create"
+          element={userData ? <CreateUser userData={userData} /> : <div>Loading...</div>}
         />
         <Route
           path="/swaggerui"

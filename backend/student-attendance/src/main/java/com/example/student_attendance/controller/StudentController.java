@@ -1,6 +1,9 @@
 package com.example.student_attendance.controller;
 
 import com.example.student_attendance.entities.Student;
+import com.example.student_attendance.entities.StudentLigjerata;
+import com.example.student_attendance.service.LigjerataService;
+import com.example.student_attendance.service.StudentLigjerataService;
 import com.example.student_attendance.service.StudentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,9 @@ import java.util.Optional;
 public class StudentController {
 
     private final StudentService studentService;
+    private final LigjerataService ligjerataService;
+
+    private final StudentLigjerataService studentLigjerataService;
 
     @PostMapping("/create")
     public Student createStudent(@RequestBody Student student) {
@@ -48,19 +54,23 @@ public class StudentController {
         return ResponseEntity.ok(studentService.getAllStudents());
     }
 
-//    @PutMapping("/update/{id}")
-//    public ResponseEntity<?> updateStudent(@PathVariable Long id, @RequestBody Student newStudent){
-//        try{
-//            return ResponseEntity.ok(studentService.updateStudentByID(id,newStudent));
-//        }catch (RuntimeException e) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-//        }
-//    }
+
+    //! Kjo metode nuk bon qysh po du
+    //* Update: E kom rregullu qysh po du
 
     @GetMapping("/getByLigjerata/{id}")
     public ResponseEntity<?> getStudentsByLigjerataID(@PathVariable Long id) {
-        System.out.println("Test test : " + studentService.getAllStudentInLigjerate(id));
-        return ResponseEntity.ok("Nice");
+        return ResponseEntity.ok(studentLigjerataService.getAllStudentsByLigjerataID(id));
+    }
+
+    @GetMapping("/getAllLigjeratatByStudentID/{id}")
+    public ResponseEntity<?> getAllLigjeratatOfStudent(@PathVariable Long id){
+        return ResponseEntity.ok(studentLigjerataService.getAllLigjeratatByStudentID(id));
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<Long> getAllNumberOfStudents(){
+        return ResponseEntity.ok(studentService.getNumberOfStudents());
     }
 
 }

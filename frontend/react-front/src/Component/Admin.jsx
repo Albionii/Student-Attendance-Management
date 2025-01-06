@@ -19,7 +19,7 @@ export default function Admin({userData}) {
   useEffect(()=>{
     const getNumberOfProfessors = () => {
       axiosInstance
-          .get("http://localhost:8080/professors/count")
+          .get("http://localhost:8080/v1/professors/count")
           .then((response) => {
             setNumberOfProfessors(response.data)
           })
@@ -27,7 +27,7 @@ export default function Admin({userData}) {
 
     const getNumberOfLigjerata = () => {
       axiosInstance
-        .get("http://localhost:8080/ligjerata/count")
+        .get("http://localhost:8080/v1/ligjerata/count")
         .then((response) => {
           setNumberOfLigjerata(response.data)
         })
@@ -35,7 +35,7 @@ export default function Admin({userData}) {
 
     const getNumberOfStudents = () => {
       axiosInstance
-        .get("http://localhost:8080/student/count")
+        .get("http://localhost:8080/v1/student/count")
         .then((response) => {
           setNumberOfStudents(response.data)
         })

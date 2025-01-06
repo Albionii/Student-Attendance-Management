@@ -12,7 +12,7 @@ const LoginForm = ({sendUserData}) => {
 
   const findUser = () => {
     axios
-    .post("http://localhost:8080/user/login", {email, password},{withCredentials: true})
+    .post("http://localhost:8080/v1/user/login", {email, password},{withCredentials: true})
     .then((response) => {
       sendUserData(response.data.user);
       navigate("/home");

@@ -32,7 +32,7 @@ export default function Student({userData}) {
 
   const handleLigjerata = () => {
     axiosInstance
-    .get(`http://localhost:8080/student/getAllLigjeratatByStudentID/`+userData.id)
+    .get(`http://localhost:8080/v1/student/getAllLigjeratatByStudentID/`+userData.id)
     .then((response) => {
       setLigjeratat(response.data);
       setCloseLigjerataDisplay(false);
@@ -44,7 +44,7 @@ export default function Student({userData}) {
 
   const getAllAttendances = () => {
     axiosInstance
-    .get(`http://localhost:8080/attendance/findByStudent/`+userData.id)
+    .get(`http://localhost:8080/v1/attendance/findByStudent/`+userData.id)
     .then((response) => {
       setAttendances(response.data);
       setAllAttendances(response.data);

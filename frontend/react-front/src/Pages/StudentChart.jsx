@@ -50,6 +50,7 @@ export default function StudentChart({ userData }) {
         <div className="w-2/3">
           <Chart
             options={chartOptions}
+            series={chartSeries}
             type="line" // Using line chart
             height="400"
             // width="1000"

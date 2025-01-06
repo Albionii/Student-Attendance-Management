@@ -12,7 +12,7 @@ const SwaggerUi = () => {
     },
     servers: [
       {
-        url: "http://localhost:8080",
+        url: "http://localhost:8080/v1",
       },
     ],
     paths: { 

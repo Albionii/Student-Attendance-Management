@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ligjerata")
+@RequestMapping("/v1/ligjerata")
 @RequiredArgsConstructor
 public class LigjerataController {
 

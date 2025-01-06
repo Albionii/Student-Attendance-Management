@@ -21,7 +21,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/attendance")
+@RequestMapping("/v1/attendance")
 public class AttendanceController  {
 
     private final AttendanceService attendanceService;

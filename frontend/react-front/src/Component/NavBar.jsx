@@ -32,7 +32,7 @@ function NavBar({userData}) {
 
   const handleLogOut = () => {
     axios
-    .post("http://localhost:8080/user/logout",{}, {withCredentials: true})
+    .post("http://localhost:8080/v1/user/logout",{}, {withCredentials: true})
     .then(() => {
       navigate("/");
     })

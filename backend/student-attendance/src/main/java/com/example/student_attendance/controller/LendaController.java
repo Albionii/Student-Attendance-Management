@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/lenda")
+@RequestMapping("/v1/lenda")
 public class LendaController {
 
     private final LendaService lendaService;

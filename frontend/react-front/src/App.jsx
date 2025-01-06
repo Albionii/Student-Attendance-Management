@@ -25,7 +25,7 @@ function App() {
   useEffect(() => {
     const validateToken = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/user/protected", {withCredentials: true});
+        const response = await axios.get("http://localhost:8080/v1/user/protected", {withCredentials: true});
 
         if (response.data !== "No cookie") {
           setUserData(response.data);

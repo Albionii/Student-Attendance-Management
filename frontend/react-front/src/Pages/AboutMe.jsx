@@ -51,7 +51,7 @@ export default function AboutMe({userData}) {
   }
   
   const updatePassword = () => {
-    axiosInstance.put("http://localhost:8080/user/pass", formData)
+    axiosInstance.put("http://localhost:8080/user/v1/pass", formData)
     .then((response)=>{
       console.log("RESPONSE : " + response.data)
       console.log("RESPONSE : " + JSON.stringify(response.data))
@@ -138,18 +138,15 @@ export default function AboutMe({userData}) {
                 >
                   Gender
                 </label>
-                  <select 
-                    name="gender" 
+
+                  <input
+                    type="text"
                     id="gender"
                     className="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
                     value={""}
-                  >
-                    <option value="" disabled selected>Gender</option>
-                    <option value="male" >Male</option>
-                    <option value="female">Female</option>
-                    <option value="notspecified">Not Specified</option>
-
-                  </select>
+                    readOnly
+                  />
+                
                 
                 </div>
               </div>

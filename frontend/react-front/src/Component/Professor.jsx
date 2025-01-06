@@ -56,7 +56,7 @@ function Professor({userData}) {
 
   const getAttendances = (ligjerataID) => {
     axiosInstance
-      .get(`http://localhost:8080/attendance/findAttendances/`+ligjerataID)
+      .get(`http://localhost:8080/v1/attendance/findAttendances/`+ligjerataID)
       .then((response) => {
         setAttendances(response.data);
       })
@@ -67,7 +67,7 @@ function Professor({userData}) {
 
   const getAllAttendances = () => {
     axiosInstance
-      .get(`http://localhost:8080/attendance/findByProfessor/`+userData.id)
+      .get(`http://localhost:8080/v1/attendance/findByProfessor/`+userData.id)
       .then((response) => {
         setAttendances(response.data);
       })
@@ -78,7 +78,7 @@ function Professor({userData}) {
   
   const getLigjeratatByProfessor = () => {
     axiosInstance
-      .get(`http://localhost:8080/ligjerata/getByProfessor/`+ userData.id)
+      .get(`http://localhost:8080/v1/ligjerata/getByProfessor/`+ userData.id)
       .then((response) => {
         setLigjeratat(response.data);
       })

@@ -14,7 +14,7 @@ import java.util.Optional;
 
 
 @RestController
-@RequestMapping("/professors")
+@RequestMapping("/v1/professors")
 @RequiredArgsConstructor
 public class ProfessorController {
 

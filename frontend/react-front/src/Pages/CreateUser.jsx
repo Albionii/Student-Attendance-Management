@@ -47,7 +47,7 @@ function CreateUser({ userData }) {
 
   const saveUser = (formData) => {
     axiosInstance
-    .post("http://localhost:8080/user/" + (role == "STUDENT"?"createStudent":"createProfessor"),formData)
+    .post("http://localhost:8080/v1/user/" + (role == "STUDENT"?"createStudent":"createProfessor"),formData)
     .then((response) => {
 
     })

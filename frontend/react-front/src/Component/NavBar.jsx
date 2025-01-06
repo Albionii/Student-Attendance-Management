@@ -82,7 +82,7 @@ function NavBar({userData}) {
             </div>
 
 
-            <div onClick={()=>navigate("/home", {state:userData})}>
+            <div onClick={()=>navigate("/home")}>
               <MenuItem className='hover:text-red-950' icon={<HiOutlineHome />}>
                 Ballina
               </MenuItem>

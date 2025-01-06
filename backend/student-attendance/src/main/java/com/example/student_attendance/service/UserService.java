@@ -18,7 +18,7 @@ public class UserService {
     @Autowired
     private final UserRepo userRepo;
 
-    @Cacheable(value = "userCache",key = "#id")
+//    @Cacheable(value = "userCache",key = "#id")
     public Optional<User> getUserById(Long id){
         return userRepo.findById(id);
     }
@@ -27,20 +27,22 @@ public class UserService {
         return userRepo.findUserByEmail(email);
     }
 
-    @CacheEvict(value = "userCache", key = "#id")
-    public User updateUserById (Long id, String firstName, String lastName){
+//    @CacheEvict(value = "userCache", key = "#id")
+    public void updateUserById (Long id, User newUser){
         Optional<User> oldUser = getUserById(id);
         if (oldUser.isPresent()){
             User user = oldUser.get();
-            user.setFirstName(firstName);
-            user.setLastName(lastName);
+//            user.setFirstName(newUser.getFirstName());
+//            user.setLastName(newUser.getLastName());
+            user.setEmail(newUser.getEmail());
+            user.setPassword(newUser.getPassword());
             userRepo.save(user);
-            return user;
+            return;
         }
         throw new RuntimeException("Useri me ket Id nuk ekziston");
     }
 
-    @Cacheable(value = "emailUserCache", key = "#email")
+//    @Cacheable(value = "emailUserCache", key = "#email")
     public User getUserByEmail(String email) {
         return userRepo.findUserByEmail(email);
     }

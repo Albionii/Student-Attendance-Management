@@ -47,6 +47,10 @@ public class AppConfig {
         return http.build();
     }
 
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     private CorsConfigurationSource corsConfigurationSource() {
         return new CorsConfigurationSource() {
@@ -76,8 +80,4 @@ public class AppConfig {
         };
     }
 
-    @Bean
-    PasswordEncoder passwordEncoder(){
-        return new BCryptPasswordEncoder();
-    }
 }

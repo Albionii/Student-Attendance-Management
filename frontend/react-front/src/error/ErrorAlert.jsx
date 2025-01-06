@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import SweetAlert2 from 'react-sweetalert2'
-export default function ErrorAlert({onConfirmLogout, show, closeShow, type}) {
+export default function ErrorAlert({onConfirmLogout=null, show, closeShow, type}) {
 
   const navigate = useNavigate();
   return (
@@ -38,6 +38,41 @@ export default function ErrorAlert({onConfirmLogout, show, closeShow, type}) {
           }}
         />
       }
+      {type == 2 &&
+        <SweetAlert2
+          show={show}
+          title="Password do not match"
+          text="Please type the password again."
+          icon="warning"
+          confirmButtonColor="#3085d6"
+          confirmButtonText="Ok!"
+          onConfirm={() => closeShow()}
+        />
+      }
+      
+      {type == 3 &&
+        <SweetAlert2
+          show={show}
+          title="Changed Password Successfully"
+          text="Your old password has been updated."
+          icon="success"
+          confirmButtonColor="#3085d6"
+          confirmButtonText="Ok!"
+          onConfirm={() => closeShow()}
+        />
+      }
+      {type == 4 &&
+        <SweetAlert2
+          show={show}
+          title="Password not secure enough"
+          text="Please add at least 8 characters and numbers."
+          icon="warning"
+          confirmButtonColor="#3085d6"
+          confirmButtonText="Ok!"
+          onConfirm={() => closeShow()}
+        />
+      }
+      
     
     </>
     

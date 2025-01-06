@@ -5,31 +5,57 @@ import Chart from "react-apexcharts";
 export default function StudentChart({ userData }) {
   const [chartOptions, setChartOptions] = useState({
     chart: {
-      id: "grades-pie-chart",
+      id: "attendance-line-chart",
+      toolbar: {
+        show: true,
+      },
     },
-    labels: ["10", "9", "8", "7", "6"], // Grade categories
-    legend: {
-      position: "bottom",
+    xaxis: {
+      categories: ["Mon", "Tue", "Wed", "Thu", "Fri"], // Replace with actual days or weeks
+      title: {
+        text: "Days of the Week", // You can update this if you're tracking attendance over different time frames (e.g., weeks, months)
+      },
+    },
+    yaxis: {
+      title: {
+        text: "Attendance (%)",
+      },
+      min: 0,
+      max: 100,
     },
     title: {
-      text: "Grade Distribution",
+      // text: "Student Attendance",
       align: "center",
+    },
+    grid: {
+      show: true,
+    },
+    legend: {
+      position: "top",
     },
   });
 
-  const [chartSeries, setChartSeries] = useState([10, 20, 35, 25, 15]); // Percentage or count for each grade
+  const [chartSeries, setChartSeries] = useState([
+    {
+      name: "Attendance",
+      data: [80, 90, 85, 70, 95], // Replace with actual attendance data (percentage or count)
+    },
+  ]);
 
   return (
     <>
       <NavBar userData={userData} />
-      <div className="chart-container">
-        <h2 className="text-center text-lg font-bold mb-4">Student Grades</h2>
-        <Chart
-          options={chartOptions}
-          series={chartSeries}
-          type="pie" // Using pie chart
-          width="400"
-        />
+      <div className="w-full flex justify-center items-center flex-col">
+        <h2 className="text-center text-lg font-bold mb-4">Student Attendance</h2>
+        <div className="w-2/3">
+          <Chart
+            options={chartOptions}
+            type="line" // Using line chart
+            height="400"
+            // width="1000"
+            
+            />
+        </div>
       </div>
     </>
   );

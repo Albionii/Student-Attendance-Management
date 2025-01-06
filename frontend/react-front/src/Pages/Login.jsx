@@ -42,7 +42,7 @@ const LoginForm = ({sendUserData}) => {
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-sm  text-gray-600 mb-2">
-              ID
+              Email
             </label>
             <input
               type="email"

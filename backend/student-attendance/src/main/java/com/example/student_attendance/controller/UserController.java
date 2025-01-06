@@ -9,19 +9,18 @@ import com.example.student_attendance.entities.User;
 import com.example.student_attendance.service.ProfessorService;
 import com.example.student_attendance.service.StudentService;
 import com.example.student_attendance.service.UserService;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -34,11 +33,14 @@ public class UserController {
     private final StudentService studentService;
     private final ProfessorService professorService;
 
+    @Autowired
+    private final BCryptPasswordEncoder passwordEncoder;
+
 
     @PutMapping("/updateUser/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody NameRequest nameRequest) {
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody User user) {
         try {
-            userService.updateUserById(id, nameRequest.getFirstName(), nameRequest.getLastName());
+            userService.updateUserById(id, user);
             return ResponseEntity.status(HttpStatus.ACCEPTED).body("User me Id " + id + "Has been Updated");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
@@ -59,11 +61,14 @@ public class UserController {
     @PostMapping("/createStudent")
     public ResponseEntity<?> createStudent(@RequestBody CreateStudentDTO student) {
         if ((userService.getUserByEmail(student.getEmail()) == null) && (studentService.getStudentByUID(student.getUid()).isEmpty())) {
+//            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashpassword = passwordEncoder.encode(student.getPassword());
+
             User newUser = new User();
             newUser.setLastName(student.getLastName());
             newUser.setEmail(student.getEmail());
             newUser.setFirstName(student.getFirstName());
-            newUser.setPassword(student.getPassword());
+            newUser.setPassword(hashpassword);
             User createdUser = userService.createUser(newUser);
             newUser.setRole(Role.STUDENT);
             Student newStudent = new Student();
@@ -79,11 +84,16 @@ public class UserController {
     @PostMapping("/createProfessor")
     public ResponseEntity<?> createProfessor(@RequestBody CreateProfessorDTO professor) {
         if (userService.getUserByEmail(professor.getEmail()) == null) {
+
+//            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+            String hashpassword = passwordEncoder.encode(professor.getPassword());
+
+
             User newUser = new User();
             newUser.setLastName(professor.getLastName());
             newUser.setEmail(professor.getEmail());
             newUser.setFirstName(professor.getFirstName());
-            newUser.setPassword(professor.getPassword());
+            newUser.setPassword(hashpassword);
             newUser.setRole(Role.PROFESSOR);
             User createdUser = userService.createUser(newUser);
             Professor newProfessor = new Professor();
@@ -108,8 +118,14 @@ public class UserController {
             id = student.getStudentID();
         }
 
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashpassword = passwordEncoder.encode(login.getPassword());
+        System.out.println("HASH : " + hashpassword);
+        System.out.println("USER PASS : " + user.getPassword());
 
-        if (user.getPassword().equals(login.getPassword())){
+        boolean isPassMatching = passwordEncoder.matches(login.getPassword(), user.getPassword());
+
+        if (isPassMatching){
 
             UserAuthRequest userAuth = new UserAuthRequest(id, user.getFirstName(), user.getLastName(), user.getEmail(), user.getRole().toString());
             List<GrantedAuthority> authorities = Collections.singletonList(
@@ -182,6 +198,28 @@ public class UserController {
         return null;
     }
 
+    @PutMapping("/pass")
+    public ResponseEntity<?> getPasswordFromUser(@RequestBody UserUpdateRequest userUpdateRequest){
+        String email = userUpdateRequest.getEmail();
+        String password = userUpdateRequest.getPassword();
 
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashpassword = passwordEncoder.encode(password);
 
+        User oldUser = userService.getUserByEmail(email);
+
+        User newUser = new User();
+        newUser.setEmail(email);
+        newUser.setPassword(hashpassword);
+        try{
+            userService.updateUserById((long) oldUser.getId(), newUser);
+            return ResponseEntity.ok("User updated successfully");
+
+        }catch (RuntimeException exception) {
+            System.out.println(exception.getMessage());
+        }
+
+        return ResponseEntity.ok("User failed to update");
+
+    }
 }

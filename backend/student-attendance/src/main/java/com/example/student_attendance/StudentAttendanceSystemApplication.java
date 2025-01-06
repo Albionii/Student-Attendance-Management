@@ -13,6 +13,6 @@ public class StudentAttendanceSystemApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(StudentAttendanceSystemApplication.class, args);
-		new NfcScannerApplication("ttyS2", 9600).run();
+		new NfcScannerApplication("COM5", 9600).run();
 	}
 }

@@ -104,7 +104,9 @@
 			<artifactId>micrometer-registry-prometheus</artifactId>
 		</dependency>
 
-	</dependencies>
+
+
+    </dependencies>
 
 	<build>
 		<plugins>

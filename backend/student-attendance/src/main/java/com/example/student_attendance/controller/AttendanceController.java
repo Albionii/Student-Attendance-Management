@@ -97,7 +97,7 @@ public class AttendanceController  {
                 newAttendance.setHyrjaNeSalle(LocalDateTime.now());
                 attendanceService.createAttendance(newAttendance);
                 student.setCurrentAttendanceID(newAttendance.getId());
-                userService.updateUserById((long) student.getStudentID(), student.getUser().getFirstName(),student.getUser().getLastName());
+                userService.updateUserById((long) student.getStudentID(), student.getUser());
             }
             // When student leaves the class.
             else {
@@ -105,7 +105,7 @@ public class AttendanceController  {
                 attendance.setDaljaNgaSalla(LocalDateTime.now());
                 attendanceService.updateAttendanceByID((long) attendance.getId(), attendance);
                 student.setCurrentAttendanceID(0);
-                userService.updateUserById((long) student.getStudentID(), student.getUser().getFirstName(),student.getUser().getLastName());
+                userService.updateUserById((long) student.getStudentID(), student.getUser());
 
             }
 
